@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6B2D45">
+<title>Brain Fog Reality Check — InnerBloom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#6B2D45;--plum-deep:#561F35;--cream:#FAF8F5;--cream-dim:#F1ECE4;
+    --gold:#A97340;--gold-soft:#C79466;--ink:#3A2630;--line:rgba(107,45,69,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  body{overflow-x:hidden;}
+  .wrap{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+  .topbar{padding:18px 24px 0;display:flex;align-items:center;justify-content:center;}
+  .brand{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .progress{height:3px;background:var(--cream-dim);border-radius:3px;margin:20px 24px 0;overflow:hidden;}
+  .progress-fill{height:100%;width:0;background:var(--gold);border-radius:3px;transition:width .6s cubic-bezier(.22,1,.36,1);}
+  .screen{flex:1;padding:32px 24px 48px;display:none;flex-direction:column;}
+  .screen.active{display:flex;animation:rise .65s cubic-bezier(.22,1,.36,1) both;}
+  @keyframes rise{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+  .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:18px;}
+  .rule{width:34px;height:1px;background:var(--line);margin:14px 0 22px;}
+  h1{font-family:'Cormorant Garamond';font-weight:500;font-size:37px;line-height:1.1;color:var(--plum);letter-spacing:-.01em;}
+  h2{font-family:'Cormorant Garamond';font-weight:500;font-size:29px;line-height:1.18;color:var(--plum);letter-spacing:-.01em;}
+  .lede{font-size:16px;}.lede.spaced p{margin-top:14px;}
+  em{font-style:italic;color:var(--plum);}strong{font-weight:600;color:var(--plum);}
+  .btn{appearance:none;border:none;cursor:pointer;font-family:'DM Sans';font-weight:500;font-size:16px;border-radius:14px;padding:18px 22px;transition:transform .15s ease,box-shadow .25s ease,background .25s ease;width:100%;text-align:center;}
+  .btn-primary{background:var(--plum);color:var(--cream);letter-spacing:.01em;box-shadow:0 6px 22px rgba(107,45,69,.22);margin-top:28px;}
+  .btn-primary:active{transform:scale(.98);}
+  .micro{font-size:12.5px;color:var(--gold-soft);margin-top:16px;text-align:center;}
+
+  /* intro */
+  .intro-fill{flex:1;display:flex;flex-direction:column;justify-content:center;}
+  .recog{margin:8px 0 0;}
+  .ritem{display:flex;align-items:center;gap:13px;background:var(--cream);border:1px solid var(--line);border-radius:13px;padding:15px 16px;margin-bottom:11px;cursor:pointer;transition:all .25s ease;}
+  .ritem .box{flex-shrink:0;width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;transition:all .25s ease;}
+  .ritem .box svg{width:12px;height:12px;opacity:0;transform:scale(.5);transition:all .3s cubic-bezier(.22,1.4,.36,1);}
+  .ritem .txt{font-size:15px;color:var(--ink);line-height:1.4;}
+  .ritem.on{background:rgba(107,45,69,.05);border-color:var(--plum);}
+  .ritem.on .box{background:var(--plum);border-color:var(--plum);}
+  .ritem.on .box svg{opacity:1;transform:scale(1);}
+
+  /* questions */
+  .q-count{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft);font-weight:600;margin-bottom:14px;}
+  .options{display:flex;flex-direction:column;gap:12px;margin-top:26px;}
+  .opt{background:var(--cream);border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:17px 19px;font-size:15px;line-height:1.4;cursor:pointer;transition:all .2s ease;position:relative;overflow:hidden;}
+  .opt:active{transform:scale(.985);}
+  .opt.sel{border-color:var(--plum);background:var(--plum);color:var(--cream);box-shadow:0 8px 24px rgba(107,45,69,.2);}
+  .opt .tick{position:absolute;right:16px;top:50%;transform:translateY(-50%) scale(0);opacity:0;transition:all .25s cubic-bezier(.22,1.4,.36,1);font-size:13px;}
+  .opt.sel .tick{transform:translateY(-50%) scale(1);opacity:1;}
+  .opt-label{padding-right:22px;display:block;}
+
+  /* result */
+  .result-tag{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:16px;}
+  .meter{margin:26px 0 28px;}
+  .signal{margin-bottom:18px;}.signal:last-child{margin-bottom:0;}
+  .signal-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .signal-row .lab{text-transform:uppercase;letter-spacing:.14em;font-size:11.5px;font-weight:600;color:var(--gold-soft);}
+  .signal-row .pct{font-family:'Cormorant Garamond';font-size:19px;font-weight:600;color:var(--gold-soft);}
+  .signal.lead .lab,.signal.lead .pct{color:var(--plum);}
+  .signal-track{height:9px;background:var(--cream-dim);border-radius:9px;overflow:hidden;}
+  .signal-bar{height:100%;width:0;border-radius:9px;background:var(--gold-soft);transition:width 1.1s cubic-bezier(.22,1,.36,1);}
+  .signal.lead .signal-bar{background:var(--plum);}
+
+  /* pattern line under percentages */
+  .vizline{font-family:'Cormorant Garamond';font-style:italic;font-size:21px;color:var(--plum);line-height:1.4;text-align:center;padding:8px 6px 4px;margin:4px 0 26px;}
+
+  .result-body p{margin-top:15px;font-size:16px;}
+  .callout{background:var(--cream-dim);border-left:2px solid var(--gold);border-radius:0 12px 12px 0;padding:18px 20px;margin-top:26px;font-size:15.5px;color:var(--ink);}
+  .callout strong{display:block;margin-bottom:6px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);}
+  .clinical-note{background:var(--cream-dim);border-radius:14px;padding:20px;margin:8px 0 26px;text-align:center;}
+  .clinical-note .cn-ic{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
+  .clinical-note p{font-family:'Cormorant Garamond';font-style:italic;font-size:19px;color:var(--plum);line-height:1.35;}
+
+  /* conversion — matches other resources */
+  .conv{background:var(--cream-dim);border-radius:18px;padding:28px 24px;margin-top:34px;}
+  .conv .tracker-bridge{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:24px;}
+  .conv h3{color:var(--plum);font-size:16px;margin-bottom:4px;}
+  .conv p{font-size:15px;margin-top:10px;}
+  .btn-outline{background:none;color:var(--plum);border:1.5px solid var(--plum);margin-top:16px;text-decoration:none;display:block;}
+  .conv .field{margin-top:18px;}
+  .conv input{width:100%;font-family:'DM Sans';font-size:16px;padding:17px 18px;border:1px solid var(--line);border-radius:14px;background:var(--cream);color:var(--ink);transition:border .2s ease;}
+  .conv input:focus{outline:none;border-color:var(--plum);}
+  .ok-cap{display:none;text-align:center;padding:6px 0;animation:rise .6s ease both;}
+  .insta{font-size:13px;letter-spacing:.12em;color:var(--gold);font-weight:600;margin-bottom:14px;}
+
+  .foot{text-align:center;padding:34px 24px 40px;}
+  .foot a{color:var(--plum);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:1px;}
+  .disclaimer{font-size:11.5px;line-height:1.5;color:var(--gold-soft);margin-top:24px;text-align:center;padding:0 6px;}
+  @media(max-width:360px){h1{font-size:32px;}h2{font-size:26px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="brand">InnerBloom</div></div>
+  <div class="progress"><div class="progress-fill" id="pfill"></div></div>
+
+  <!-- INTRO -->
+  <section class="screen active" id="s-intro">
+    <div class="intro-fill">
+      <div class="eyebrow">The Brain Fog Reality Check</div>
+      <h1>You searched it at 2am. You were not the only one.</h1>
+      <div class="rule"></div>
+      <div class="lede spaced">
+        <p>The forgetting is one thing. Not knowing <em>why</em> you are forgetting is something else entirely.</p>
+        <p>This will not diagnose anything. It will help you see whether what you are experiencing has the pattern of a hormonal shift &mdash; or whether it is worth a different kind of conversation.</p>
+      </div>
+      <div class="recog">
+        <div class="ritem" onclick="toggleR(this)"><div class="box"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#FAF8F5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="txt">I used to be the sharp one</div></div>
+        <div class="ritem" onclick="toggleR(this)"><div class="box"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#FAF8F5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="txt">I Googled "brain fog dementia" when no one was watching</div></div>
+        <div class="ritem" onclick="toggleR(this)"><div class="box"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#FAF8F5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="txt">Some days I am clear. Some days I cannot finish a sentence</div></div>
+      </div>
+      <button class="btn btn-primary" onclick="start()">Show me the pattern</button>
+      <div class="micro">Four questions. About two minutes.</div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="s-quiz">
+    <div class="q-count" id="qcount"></div>
+    <h2 id="qtext"></h2>
+    <div class="options" id="qopts"></div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen" id="s-result">
+    <div class="result-tag">What You Described</div>
+    <h2 id="rhead"></h2>
+    <div class="meter">
+      <div class="signal" id="sig-c">
+        <div class="signal-row"><span class="lab">Hormonal-type pattern</span><span class="pct" id="pct-c">0%</span></div>
+        <div class="signal-track"><div class="signal-bar" id="bar-c"></div></div>
+      </div>
+      <div class="signal" id="sig-f">
+        <div class="signal-row"><span class="lab">Constant pattern</span><span class="pct" id="pct-f">0%</span></div>
+        <div class="signal-track"><div class="signal-bar" id="bar-f"></div></div>
+      </div>
+    </div>
+
+    <!-- pattern line (results 1 & 3) -->
+    <div class="vizline" id="vizbox" style="display:none">
+      Fog that comes and goes moves with your hormones. That is what yours looks like.
+    </div>
+
+    <!-- clinical note (result 2) -->
+    <div class="clinical-note" id="clinnote" style="display:none">
+      <div class="cn-ic"><svg viewBox="0 0 22 22" fill="none"><path d="M11 5v7M11 16h.01" stroke="#A97340" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <p id="clinnote-text"></p>
+    </div>
+
+    <div class="result-body" id="rbody"></div>
+    <div class="callout" id="rcallout"></div>
+
+    <!-- CONVERSION — matches other resources -->
+    <div class="conv">
+      <div class="tracker-bridge">
+        <h3 id="trackerHead">Start seeing the pattern for yourself</h3>
+        <p id="trackerCopy">Log your foggy days and your clear days. Over 30 days, the variation shows itself &mdash; and the free InnerBloom Pattern Tracker is built for exactly that.</p>
+        <a class="btn btn-outline" href="https://innerbloomkit-source.github.io/innerbloom-resource/pattern-tracker.html">Open the free Pattern Tracker</a>
+      </div>
+      <div id="capture">
+        <h2 id="capHead"></h2>
+        <div id="capBody"></div>
+        <div class="field"><input type="email" id="email" placeholder="Your email" autocomplete="email" inputmode="email"></div>
+        <button class="btn btn-primary" id="submitBtn" onclick="capture()" style="margin-top:16px">Tell me when it is ready</button>
+        <div class="micro">No spam. No noise. Just the update when it matters.</div>
+      </div>
+      <div class="ok-cap" id="ok">
+        <div class="insta">@innerbloom_kit</div>
+        <h2 style="font-size:24px">You are on the list.</h2>
+        <p style="font-size:15px;margin-top:10px">The next time the fog rolls in, you will know what you are looking at &mdash; and you will know it is not the thing you feared at 2am. We will be in touch when there is more.</p>
+      </div>
+    </div>
+
+    <div class="foot">
+      <a href="https://innerbloomkit.com" target="_blank" rel="noopener">innerbloomkit.com</a>
+      <div class="disclaimer">This is not a diagnostic tool and does not replace medical advice. It is intended to support understanding, not to diagnose or rule out any condition. If you are worried about your memory or thinking, please speak with a qualified medical professional.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const KLAVIYO_COMPANY_ID="XmzfxG";
+const KLAVIYO_LIST_ID="SKn8iJ"; // Brain Fog Reality Check (SIGNAL)
+
+const QUESTIONS=[
+  {
+    q:"Looking at the past few months \u2014 do you have genuinely clear days alongside the foggy ones?",
+    a:[
+      {t:"Yes \u2014 some days I am completely sharp, others I am lost in fog",c:2,f:0},
+      {t:"Some variation, but the fog is always there to some degree",c:1,f:1},
+      {t:"No real variation \u2014 it feels consistent almost every day",c:0,f:2},
+    ]
+  },
+  {
+    q:"Does the fog seem to follow any pattern \u2014 a point in your cycle, after broken sleep, or a time of day?",
+    a:[
+      {t:"Yes \u2014 I have noticed it seems to follow something",c:2,f:0},
+      {t:"I have not tracked it closely enough to say",c:1,f:1},
+      {t:"No \u2014 it feels random and ever-present",c:0,f:2},
+    ]
+  },
+  {
+    q:"The thing that bothers you most right now feels most like:",
+    a:[
+      {t:"Losing words mid-sentence \u2014 the word is there but I cannot reach it",c:2,f:0},
+      {t:"Losing my train of thought, drifting off in the middle of a task",c:2,f:0},
+      {t:"Forgetting recent conversations or events I feel I should remember",c:1,f:1},
+    ]
+  },
+  {
+    q:"When this started, what else was going on?",
+    a:[
+      {t:"Around when my cycle shifted, or other physical changes appeared",c:2,f:0},
+      {t:"It came on gradually over months \u2014 hard to pinpoint exactly when",c:1,f:1},
+      {t:"It started fairly suddenly, with no obvious explanation",c:0,f:2},
+    ]
+  }
+];
+
+let qi=0;const answers=[];
+function toggleR(el){el.classList.toggle('on');}
+function setProgress(p){document.getElementById('pfill').style.width=p+'%';}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'instant'});}
+function start(){qi=0;renderQ();show('s-quiz');}
+
+function renderQ(){
+  const item=QUESTIONS[qi];
+  document.getElementById('qcount').textContent='Question '+(qi+1)+' of '+QUESTIONS.length;
+  document.getElementById('qtext').textContent=item.q;
+  setProgress(Math.round((qi/QUESTIONS.length)*100)+6);
+  const wrap=document.getElementById('qopts');wrap.innerHTML='';
+  item.a.forEach((opt,idx)=>{
+    const b=document.createElement('button');b.className='opt';
+    b.innerHTML='<span class="opt-label">'+opt.t+'</span><span class="tick">\u25cf</span>';
+    b.onclick=()=>choose(idx,b);
+    wrap.appendChild(b);
+  });
+  const sc=document.getElementById('s-quiz');sc.classList.remove('active');void sc.offsetWidth;sc.classList.add('active');
+}
+function choose(idx,el){
+  document.querySelectorAll('#qopts .opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  answers[qi]=QUESTIONS[qi].a[idx];
+  setTimeout(()=>{qi++;if(qi<QUESTIONS.length){renderQ();}else{computeResult();}},360);
+}
+
+function computeResult(){
+  let c=0,f=0;answers.forEach(a=>{c+=a.c;f+=a.f;});
+  const total=c+f||1;
+  const cPct=Math.round((c/total)*100);
+  const fPct=100-cPct;
+  setProgress(100);
+
+  let head,body,callout,lead,showViz,clinical=null,capHead,capBody,trackerHead,trackerCopy;
+
+  if(cPct>=62){
+    lead='c';showViz=true;
+    head="What you described looks far more like a hormonal pattern than the thing you feared.";
+    body='<p>You have probably searched <em>brain fog dementia</em> at 2am. Most women who take this have. So read this part slowly.</p>'+
+         '<p>The fog you described <strong>comes and goes</strong>. It follows something. It is loudest when a word you know is right there will not come. Those are the fingerprints of estrogen fluctuation, not decline &mdash; because estrogen plays a direct role in how your brain retrieves words and holds focus.</p>'+
+         '<p>For many women, this is not a sign of what is coming. It is a signal of what may be happening right now.</p>';
+    callout='<strong>What this means</strong>This is not a diagnosis. It is a pattern. And a pattern that varies is one you can finally see, track, and understand &mdash; instead of fear.';
+    trackerHead="See the pattern for yourself";
+    trackerCopy="Log your foggy days and your clear days. Over 30 days, the variation shows itself &mdash; and the free InnerBloom Pattern Tracker is built for exactly that.";
+    capHead="Now you can stop guessing at 2am.";
+    capBody='<p>Seeing the pattern is the relief. Understanding it is the goal. InnerBloom is building a perimenopause clarity kit that connects your foggy days to what your hormones were actually doing &mdash; so the fog stops being frightening, starts making sense, and you get to feel like yourself again.</p><p>Leave your email and we will tell you the moment it is ready.</p>';
+  } else if(cPct<=38){
+    lead='f';showViz=false;
+    clinical="What you described did not show the on-and-off pattern that usually points to hormonal fluctuation. That deserves a proper look \u2014 not a guess from a quiz.";
+    head="What you described is worth a proper conversation \u2014 and that is not a reason to panic.";
+    body='<p>Take this to a doctor who understands both perimenopause <em>and</em> cognitive health, and ask them directly to help you tell the difference. You are not overreacting. You are being responsible.</p>'+
+         '<p>Most causes of steady fog are manageable, including hormonal ones that simply present consistently. The point is to have it looked at properly, not to carry it alone.</p>';
+    callout='<strong>What this means</strong>This is not a diagnosis. It is a prompt to get a clear answer from someone who can actually give you one.';
+    trackerHead="Walk in with data, not just worry";
+    trackerCopy="The most useful thing you can bring to that appointment is a record of your fog &mdash; which days, how bad, what else was happening. The free InnerBloom Pattern Tracker gives you exactly that.";
+    capHead="And the part that makes the data mean something.";
+    capBody='<p>InnerBloom is building a perimenopause clarity kit that connects your symptoms to what your hormones are actually doing &mdash; so you walk into that room informed instead of dismissed, and stop having to fight to be believed.</p><p>Leave your email and we will tell you the moment it is ready.</p>';
+  } else {
+    lead=(cPct>=fPct)?'c':'f';showViz=true;
+    head="What you described points both ways \u2014 and the part that varies is the part that matters.";
+    body='<p>Some of what you described <strong>varies</strong> &mdash; and that is the signature of a hormonal pattern. Some of it felt more constant. Both being present is common, and it is not something a quiz can settle.</p>'+
+         '<p>Here is the useful part: the only way to know which way it leans is to watch it over time. Thirty days of noticing &mdash; which days are foggy, where you are in your cycle, how you slept &mdash; turns guessing into seeing.</p>';
+    callout='<strong>What this means</strong>The fact that it varies at all is reason for some relief. Tracking it is how you find out what that variation is telling you.';
+    trackerHead="Turn guessing into seeing";
+    trackerCopy="Thirty days of noticing &mdash; foggy days, clear days, where you are in your cycle &mdash; is how the variation tells you which way it leans. The free InnerBloom Pattern Tracker is built for exactly that.";
+    capHead="Stop guessing. Start seeing.";
+    capBody='<p>InnerBloom is building a perimenopause clarity kit that connects your foggy days to what your hormones were actually doing &mdash; so the fog stops being a mystery you carry alone, and you get to feel like yourself again.</p><p>Leave your email and we will tell you the moment it is ready.</p>';
+  }
+
+  document.getElementById('rhead').textContent=head;
+  document.getElementById('rbody').innerHTML=body;
+  document.getElementById('rcallout').innerHTML=callout;
+  document.getElementById('capHead').textContent=capHead;
+  document.getElementById('capBody').innerHTML=capBody;
+  document.getElementById('trackerHead').textContent=trackerHead;
+  document.getElementById('trackerCopy').innerHTML=trackerCopy;
+  document.getElementById('pct-c').textContent=cPct+'%';
+  document.getElementById('pct-f').textContent=fPct+'%';
+  document.getElementById('sig-c').classList.toggle('lead',lead==='c');
+  document.getElementById('sig-f').classList.toggle('lead',lead==='f');
+
+  document.getElementById('vizbox').style.display=showViz?'block':'none';
+  document.getElementById('clinnote').style.display=clinical?'block':'none';
+  if(clinical)document.getElementById('clinnote-text').textContent=clinical;
+
+  show('s-result');
+  setTimeout(()=>{
+    document.getElementById('bar-c').style.width=cPct+'%';
+    document.getElementById('bar-f').style.width=fPct+'%';
+  },260);
+}
+
+async function capture(){
+  const email=document.getElementById('email').value.trim();
+  const btn=document.getElementById('submitBtn');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){document.getElementById('email').style.borderColor='#A9404A';document.getElementById('email').focus();return;}
+  btn.textContent='One moment\u2026';btn.style.opacity='.7';
+  try{
+    await fetch('https://a.klaviyo.com/client/subscriptions/?company_id='+KLAVIYO_COMPANY_ID,{
+      method:'POST',headers:{'Content-Type':'application/json','revision':'2024-10-15'},
+      body:JSON.stringify({data:{type:'subscription',attributes:{profile:{data:{type:'profile',attributes:{email:email}}}},relationships:{list:{data:{type:'list',id:KLAVIYO_LIST_ID}}}}})
+    });
+  }catch(e){}
+  document.getElementById('capture').style.display='none';
+  document.getElementById('ok').style.display='block';
+}
+</script>
+</body>
+</html>
