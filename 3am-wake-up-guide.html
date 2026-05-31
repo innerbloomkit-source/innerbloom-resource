@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1A0D12">
+<title>The InnerBloom 3AM Wake-Up Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#6B2D45;--plum-deep:#561F35;--cream:#FAF8F5;--cream-dim:#F1ECE4;
+    --gold:#A97340;--gold-soft:#C79466;--ink:#3A2630;--line:rgba(107,45,69,.16);
+    --night:#1A0D12;--night-2:#2A1520;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  .wrap{max-width:540px;margin:0 auto;}
+
+  h1{font-family:'Cormorant Garamond';font-weight:500;letter-spacing:-.01em;line-height:1.08;}
+  h2{font-family:'Cormorant Garamond';font-weight:500;font-size:30px;line-height:1.16;color:var(--plum);letter-spacing:-.01em;}
+  h3{font-family:'DM Sans';font-weight:600;font-size:14px;letter-spacing:.02em;}
+  em{font-style:italic;}strong{font-weight:600;}
+
+  /* scroll reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ============ SECTION 1 — NIGHT ============ */
+  .night{background:linear-gradient(180deg,var(--night) 0%,var(--night-2) 70%,#3A1F2E 100%);color:#E8D9DF;padding:64px 26px 80px;position:relative;overflow:hidden;}
+  .night .eyebrow{font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-soft);font-weight:600;text-align:center;margin-bottom:40px;}
+  .clock{text-align:center;margin-bottom:44px;}
+  .clock .time{font-family:'Cormorant Garamond';font-size:62px;font-weight:400;color:#C98B9C;letter-spacing:.04em;animation:breathe 4s ease-in-out infinite;}
+  .clock .sub{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(232,217,223,.45);margin-top:4px;}
+  @keyframes breathe{0%,100%{opacity:.55;}50%{opacity:1;}}
+  .night h1{font-size:38px;color:#F3E9ED;text-align:center;margin-bottom:18px;}
+  .night .lead{font-size:16.5px;color:rgba(232,217,223,.85);text-align:center;max-width:420px;margin:0 auto;}
+  .night .lead p{margin-top:15px;}
+
+  .recog{margin:46px auto 0;max-width:430px;}
+  .recog-h{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft);font-weight:600;text-align:center;margin-bottom:20px;}
+  .ritem{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:15px 17px;margin-bottom:11px;cursor:pointer;transition:all .25s ease;}
+  .ritem .box{flex-shrink:0;width:22px;height:22px;border-radius:7px;border:1.5px solid rgba(232,217,223,.4);display:flex;align-items:center;justify-content:center;transition:all .25s ease;}
+  .ritem .box svg{width:12px;height:12px;opacity:0;transform:scale(.5);transition:all .3s cubic-bezier(.22,1.4,.36,1);}
+  .ritem .txt{font-size:15px;color:rgba(232,217,223,.9);line-height:1.4;}
+  .ritem.on{background:rgba(201,139,156,.16);border-color:rgba(201,139,156,.5);}
+  .ritem.on .box{background:#C98B9C;border-color:#C98B9C;}
+  .ritem.on .box svg{opacity:1;transform:scale(1);}
+  .recog-foot{text-align:center;font-size:14px;color:rgba(232,217,223,.7);margin-top:24px;min-height:22px;font-style:italic;font-family:'Cormorant Garamond';font-size:19px;opacity:0;transition:opacity .6s ease;}
+  .recog-foot.show{opacity:1;}
+
+  .night-transition{text-align:center;margin-top:50px;}
+  .night-transition .q{font-family:'Cormorant Garamond';font-style:italic;font-size:24px;color:#E0C2CC;line-height:1.3;}
+  .scroll-cue{text-align:center;margin-top:34px;color:rgba(232,217,223,.4);font-size:22px;animation:bob 2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(7px);}}
+
+  /* ============ BODY SECTIONS ============ */
+  .sec{padding:60px 26px;}
+  .sec-label{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:14px;}
+  .rule{width:34px;height:1px;background:var(--line);margin:16px 0 24px;}
+  .sec h2{margin-bottom:8px;}
+  .sec .body{font-size:16px;color:var(--ink);}
+  .sec .body p{margin-top:15px;}
+  .accent{color:var(--plum);font-style:italic;font-family:'Cormorant Garamond';font-size:21px;line-height:1.4;margin-top:22px;}
+
+  /* hormone curve */
+  .curve-wrap{background:var(--cream-dim);border-radius:18px;padding:26px 22px 20px;margin:30px 0;}
+  .curve-title{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600;text-align:center;margin-bottom:6px;}
+  .curve-sub{font-size:12px;color:var(--gold-soft);text-align:center;margin-bottom:16px;}
+  svg.curve{width:100%;height:140px;display:block;}
+  .curve-x{display:flex;justify-content:space-between;font-size:10.5px;color:var(--gold-soft);letter-spacing:.05em;margin-top:6px;padding:0 2px;}
+  .curve-legend{display:flex;justify-content:center;gap:20px;margin-top:14px;}
+  .curve-legend span{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink);font-weight:500;}
+  .curve-legend i{width:18px;height:3px;border-radius:3px;}
+  .dash-prog{background:var(--plum);}
+  .dash-cort{background:var(--gold);}
+  .curve path{stroke-dasharray:600;stroke-dashoffset:600;}
+  .curve.draw path{animation:draw 1.8s cubic-bezier(.4,0,.2,1) forwards;}
+  .curve.draw path.c2{animation-delay:.4s;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .window-band{opacity:0;transition:opacity 1s ease .9s;}
+  .curve.draw .window-band{opacity:1;}
+
+  .cite{font-size:11.5px;color:var(--gold-soft);margin-top:20px;line-height:1.5;}
+
+  /* hold-to-reveal cards */
+  .hold-intro{font-size:13px;color:var(--gold-soft);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+  .hold-intro svg{width:15px;height:15px;}
+  .hcard{background:var(--cream-dim);border-radius:15px;margin-bottom:12px;overflow:hidden;position:relative;cursor:pointer;user-select:none;-webkit-user-select:none;}
+  .hcard .front{padding:20px 22px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2;}
+  .hcard .front .name{font-size:16px;font-weight:600;color:var(--plum);}
+  .hcard .front .hint{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-soft);font-weight:600;transition:opacity .3s ease;}
+  .hcard .fill{position:absolute;top:0;left:0;height:100%;width:0;background:var(--plum);z-index:1;border-radius:15px;transition:width .1s linear;}
+  .hcard .back{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.22,1,.36,1);background:var(--plum);}
+  .hcard .back p{padding:0 22px 22px;color:#F0E2E8;font-size:14.5px;line-height:1.5;}
+  .hcard.open .back{max-height:200px;}
+  .hcard.open .fill{width:100%;opacity:0;transition:opacity .4s ease;}
+  .hcard.open .front .name{color:var(--cream);transition:color .3s ease;}
+  .hcard.open .front .hint{opacity:0;}
+  .hcard.open .front{background:var(--plum);}
+
+  /* expandable cards */
+  .ecard{border:1px solid var(--line);border-radius:15px;margin-bottom:12px;overflow:hidden;background:var(--cream);}
+  .ecard .ehead{padding:19px 22px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+  .ecard .ehead .etitle{font-size:15.5px;font-weight:600;color:var(--plum);}
+  .ecard .ehead .plus{width:22px;height:22px;position:relative;flex-shrink:0;}
+  .ecard .ehead .plus:before,.ecard .ehead .plus:after{content:'';position:absolute;background:var(--gold);border-radius:2px;transition:transform .35s cubic-bezier(.22,1,.36,1);}
+  .ecard .ehead .plus:before{width:14px;height:2px;top:10px;left:4px;}
+  .ecard .ehead .plus:after{width:2px;height:14px;top:4px;left:10px;}
+  .ecard.open .plus:after{transform:rotate(90deg);opacity:0;}
+  .ecard .ebody{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.22,1,.36,1);}
+  .ecard .ebody p{padding:0 22px 20px;font-size:14.5px;color:var(--ink);line-height:1.55;}
+  .ecard.open .ebody{max-height:260px;}
+
+  /* next steps */
+  .steps{counter-reset:step;margin-top:8px;}
+  .step{display:flex;gap:16px;margin-top:22px;}
+  .step .n{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--gold);color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond';font-size:17px;font-weight:600;}
+  .step .stxt h4{font-size:15px;font-weight:600;color:var(--plum);margin-bottom:3px;}
+  .step .stxt p{font-size:14px;color:var(--ink);line-height:1.5;}
+
+  /* conversion */
+  .conv{background:var(--cream-dim);border-radius:18px;padding:28px 24px;margin-top:36px;}
+  .conv .tracker-bridge{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:24px;}
+  .conv p{font-size:15px;margin-top:10px;}
+  .btn{appearance:none;border:none;cursor:pointer;font-family:'DM Sans';font-weight:500;font-size:16px;border-radius:14px;padding:17px 22px;width:100%;text-align:center;transition:transform .15s ease,opacity .25s ease;text-decoration:none;display:block;}
+  .btn-primary{background:var(--plum);color:var(--cream);box-shadow:0 6px 22px rgba(107,45,69,.22);margin-top:18px;}
+  .btn-primary:active{transform:scale(.98);}
+  .btn-outline{background:none;color:var(--plum);border:1.5px solid var(--plum);margin-top:16px;}
+  .field{margin-top:18px;}
+  .field input{width:100%;font-family:'DM Sans';font-size:16px;padding:17px 18px;border:1px solid var(--line);border-radius:14px;background:var(--cream);color:var(--ink);transition:border .2s ease;}
+  .field input:focus{outline:none;border-color:var(--plum);}
+  .micro{font-size:12.5px;color:var(--gold-soft);margin-top:14px;text-align:center;}
+  .ok-cap{display:none;text-align:center;padding:8px 0;animation:fadein .6s ease both;}
+  @keyframes fadein{from{opacity:0;}to{opacity:1;}}
+  .insta{font-size:13px;letter-spacing:.12em;color:var(--gold);font-weight:600;margin-bottom:14px;}
+
+  .closing{text-align:center;padding:54px 30px 30px;}
+  .closing .line{font-family:'Cormorant Garamond';font-style:italic;font-size:25px;color:var(--plum);line-height:1.35;}
+  .foot{text-align:center;padding:10px 26px 50px;}
+  .foot a{color:var(--plum);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:1px;}
+  .disclaimer{font-size:11.5px;line-height:1.5;color:var(--gold-soft);margin-top:24px;text-align:center;}
+  @media(max-width:360px){.night h1{font-size:33px;}h2{font-size:27px;}.clock .time{font-size:54px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ SECTION 1 — NIGHT ============ -->
+  <section class="night">
+    <div class="eyebrow">The InnerBloom 3AM Wake-Up Guide</div>
+    <div class="clock">
+      <div class="time">3:04</div>
+      <div class="sub">again</div>
+    </div>
+    <h1>You are not<br>imagining this.</h1>
+    <div class="lead">
+      <p>The room is dark. Nothing happened. There is no reason to be awake.</p>
+      <p>But you are. And you have been telling yourself it is stress &mdash; that you need to relax, that it will pass.</p>
+    </div>
+
+    <div class="recog">
+      <div class="recog-h">Does this sound like you?</div>
+      <div class="ritem" onclick="toggleR(this)"><div class="box"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#1A0D12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="txt">Wide awake between 2 and 4am, almost every night</div></div>
+      <div class="ritem" onclick="toggleR(this)"><div class="box"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#1A0D12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="txt">Heart beating slightly faster than it should be</div></div>
+      <div class="ritem" onclick="toggleR(this)"><div class="box"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#1A0D12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="txt">A low dread you cannot name and did not cause</div></div>
+      <div class="ritem" onclick="toggleR(this)"><div class="box"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#1A0D12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="txt">Unable to fall back asleep, even exhausted</div></div>
+      <div class="ritem" onclick="toggleR(this)"><div class="box"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#1A0D12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="txt">Awake every morning already depleted, before the day begins</div></div>
+      <div class="recog-foot" id="recogFoot">If you recognised yourself, keep reading. This has a name.</div>
+    </div>
+
+    <div class="night-transition">
+      <div class="q">What if it is not stress &mdash;<br>and never was?</div>
+    </div>
+    <div class="scroll-cue">&darr;</div>
+  </section>
+
+  <!-- ============ SECTION 2 — WHY ============ -->
+  <section class="sec reveal">
+    <div class="sec-label">Why This Happens</div>
+    <h2>Two things working against your sleep.</h2>
+    <div class="rule"></div>
+    <div class="body">
+      <p><strong>Progesterone does more than most people realise.</strong> It is not only a reproductive hormone. It is part of how your body holds you in deep, continuous sleep &mdash; through a calming system in the brain that acts like a self-produced sedative.</p>
+      <p>When progesterone is stable, that calm holds. When it starts fluctuating in perimenopause, the support becomes inconsistent. The brain becomes more easily activated at night. Light sleep that would normally pass unnoticed can tip into full wakefulness.</p>
+      <p>At the same time, <strong>cortisol</strong> &mdash; your stress hormone &mdash; has a natural rhythm. It begins rising in the second half of the night, before you wake. For a woman whose sleep is already fragile from progesterone shifts, that early cortisol rise can be the thing that pulls her fully awake, hours too soon.</p>
+    </div>
+
+    <div class="curve-wrap">
+      <div class="curve-title">Your hormones overnight</div>
+      <div class="curve-sub">Why the 2&ndash;4am window is when it happens</div>
+      <svg class="curve" id="curve" viewBox="0 0 320 140" preserveAspectRatio="none">
+        <rect class="window-band" x="150" y="0" width="70" height="140" fill="rgba(154,85,96,.12)"/>
+        <path class="c1" d="M5,40 C60,42 90,55 150,95 C200,120 260,128 315,130" fill="none" stroke="#6B2D45" stroke-width="3" stroke-linecap="round"/>
+        <path class="c2" d="M5,120 C70,118 120,110 160,80 C210,44 260,30 315,22" fill="none" stroke="#A97340" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="curve-x"><span>10pm</span><span>1am</span><span>3am</span><span>6am</span></div>
+      <div class="curve-legend">
+        <span><i class="dash-prog"></i>Progesterone</span>
+        <span><i class="dash-cort"></i>Cortisol</span>
+      </div>
+    </div>
+
+    <p class="accent">For many women, this feels completely different from ordinary insomnia or stress-related waking. Because it is.</p>
+    <p class="cite">Based on published research including Lancel et al. (American Journal of Physiology, 1996), Haufe et al. (Sleep Medicine Reviews, 2022), and a Phase III trial of 189 perimenopausal women showing improved sleep quality versus placebo.</p>
+  </section>
+
+  <!-- ============ SECTION 3 — USUAL ADVICE ============ -->
+  <section class="sec reveal" style="background:var(--cream-dim)">
+    <div class="sec-label">What To Know</div>
+    <h2>Why the usual advice does not touch this.</h2>
+    <div class="rule"></div>
+    <div class="body"><p>You have probably already tried these. Here is why they did not work &mdash; for this specific pattern.</p></div>
+    <div class="hold-intro" style="margin-top:24px">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v6m0 0a4 4 0 100 8 4 4 0 000-8z" stroke="#C79466" stroke-width="1.6" stroke-linecap="round"/></svg>
+      Press and hold each one to reveal why
+    </div>
+
+    <div class="hcard" data-back="Melatonin regulates falling asleep &mdash; sleep onset. It does not address the progesterone or cortisol pattern behind mid-sleep waking. This is why it may help you drift off, but cannot keep you asleep through the night."><div class="fill"></div><div class="front"><span class="name">Melatonin</span><span class="hint">Hold</span></div><div class="back"><p></p></div></div>
+    <div class="hcard" data-back="A glass of wine does help you fall asleep faster. But alcohol suppresses deep sleep and triggers a cortisol rebound in the second half of the night &mdash; which can directly amplify the 3am wake-up. The pattern usually becomes clear within two weeks of stopping."><div class="fill"></div><div class="front"><span class="name">Alcohol before bed</span><span class="hint">Hold</span></div><div class="back"><p></p></div></div>
+    <div class="hcard" data-back="Consistent bedtime, no screens, a cool room, lavender. Genuinely helpful for general sleep quality &mdash; but designed for ordinary sleep, not a pattern-specific biological wake-up with a hormonal driver underneath it."><div class="fill"></div><div class="front"><span class="name">Generic sleep hygiene</span><span class="hint">Hold</span></div><div class="back"><p></p></div></div>
+    <div class="hcard" data-back="The dread that comes with the 3am wake-up often arrives before you are even fully awake. It feels physiological, not thought-driven &mdash; because it may be. Trying to think your way out of it can be working against the biology."><div class="fill"></div><div class="front"><span class="name">Telling yourself to relax</span><span class="hint">Hold</span></div><div class="back"><p></p></div></div>
+  </section>
+
+  <!-- ============ SECTION 4 — WHAT MAY HELP ============ -->
+  <section class="sec reveal">
+    <div class="sec-label">Worth Trying</div>
+    <h2>What may actually help.</h2>
+    <div class="rule"></div>
+    <div class="body"><p>Not fixes. Starting points &mdash; things worth testing for a couple of weeks to see if they change your pattern.</p></div>
+    <div style="margin-top:26px">
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">Tracking the pattern</span><span class="plus"></span></div><div class="ebody"><p>Symptoms feel random until the pattern becomes visible. Progesterone tends to be lowest in the premenstrual phase and in cycles where ovulation did not occur. If your wake-ups cluster at specific points, that is information &mdash; not to judge, just to notice.</p></div></div>
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">Reducing evening cortisol load</span><span class="plus"></span></div><div class="ebody"><p>Cortisol is cumulative. A high-stress evening can extend into the early morning. Anything that genuinely lowers stress in the two to three hours before sleep may help &mdash; a walk, quiet time, less stimulation. Not as a rule. As an experiment.</p></div></div>
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">Blood sugar stability before bed</span><span class="plus"></span></div><div class="ebody"><p>A cortisol rise can be amplified by blood sugar dropping overnight. A small protein-based snack before bed &mdash; not a meal, something small &mdash; may help stabilise it for some women. Worth testing for two weeks to see if it shifts the pattern.</p></div></div>
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">A doctor who understands perimenopause</span><span class="plus"></span></div><div class="ebody"><p>If this pattern is consistent and significantly affecting your life, it deserves a proper conversation &mdash; not general sleep medicine, but a professional who specifically understands perimenopausal hormone fluctuation. This is a legitimate pattern. It deserves to be taken seriously.</p></div></div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 5 — NEXT + CONVERSION ============ -->
+  <section class="sec reveal" style="background:var(--cream-dim)">
+    <div class="sec-label">What Comes Next</div>
+    <h2>Start with three things.</h2>
+    <div class="rule"></div>
+    <div class="body"><p>You do not need to track everything. Just these three, however briefly.</p></div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div class="stxt"><h4>Which nights it happens</h4><p>Just mark it. A dot, a tick, a note. You do not need to write an essay.</p></div></div>
+      <div class="step"><div class="n">2</div><div class="stxt"><h4>Where you are in your cycle</h4><p>Progesterone is lowest premenstrually and in cycles without ovulation. Cycle position alongside wake-up nights can reveal a pattern within a pattern.</p></div></div>
+      <div class="step"><div class="n">3</div><div class="stxt"><h4>What you ate and did in the 4 hours before bed</h4><p>Blood sugar, evening stress, screens, alcohol. Not to judge. To notice.</p></div></div>
+    </div>
+
+    <div class="conv">
+      <div class="tracker-bridge">
+        <h3 style="color:var(--plum);font-size:16px;margin-bottom:4px">Already tracking with InnerBloom?</h3>
+        <p>These three slot directly into the Sleep and Cycle columns of the free Pattern Tracker. The pattern will show itself over 30 days.</p>
+        <a class="btn btn-outline" href="https://innerbloomkit-source.github.io/innerbloom-resource/pattern-tracker.html">Open the free Pattern Tracker</a>
+      </div>
+      <div id="capture">
+        <h2 style="font-size:25px">The tracker shows you <em>when</em>. We are building <em>why</em> &mdash; and what to do about it.</h2>
+        <p>InnerBloom is creating a perimenopause clarity kit that connects your symptoms to what your hormones are actually doing &mdash; then shows you how to support your body based on your own pattern, not generic advice.</p>
+        <p>Because seeing the pattern is only the start. The point is feeling like yourself again &mdash; sleeping through the night, getting your clarity back, and stopping the quiet fear that something is wrong with you.</p>
+        <p>We are building what we wish existed when all of this started feeling confusing.</p>
+        <div class="field"><input type="email" id="email" placeholder="Your email" autocomplete="email" inputmode="email"></div>
+        <button class="btn btn-primary" id="submitBtn" onclick="capture()">Tell me when it is ready</button>
+        <div class="micro">No spam. No noise. Just the update when it matters.</div>
+      </div>
+      <div class="ok-cap" id="okcap">
+        <div class="insta">@innerbloom_kit</div>
+        <h2 style="font-size:24px">You are on the list.</h2>
+        <p style="font-size:15px;margin-top:10px">The next time it happens at 3am, you will at least know what you are looking at. We will be in touch when there is more.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="closing reveal">
+    <div class="line">You are not failing at sleep.<br>Your body may be speaking in patterns<br>you were never taught how to see.</div>
+  </div>
+
+  <div class="foot">
+    <a href="https://innerbloomkit.com" target="_blank" rel="noopener">innerbloomkit.com</a>
+    <div class="disclaimer">This guide is for informational purposes only and does not constitute medical advice. It is based on published research and is intended to support understanding, not to diagnose or treat any condition. If sleep disruption is significantly affecting your quality of life, please speak with a qualified medical professional.</div>
+  </div>
+</div>
+
+<script>
+const KLAVIYO_COMPANY_ID="XmzfxG";
+const KLAVIYO_LIST_ID="SMfTLg"; // 3AM Wake-Up Guide (SLEEP)
+
+/* recognition taps */
+function toggleR(el){
+  el.classList.toggle('on');
+  const any=document.querySelectorAll('.ritem.on').length>0;
+  document.getElementById('recogFoot').classList.toggle('show',any);
+}
+
+/* scroll reveal */
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); if(e.target.querySelector&&e.target.querySelector('#curve')){drawCurve();} obs.unobserve(e.target);} });
+},{threshold:.18});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* hormone curve draw */
+let curveDrawn=false;
+function drawCurve(){ if(curveDrawn)return; const c=document.getElementById('curve'); if(c){c.classList.add('draw');curveDrawn=true;} }
+// also trigger if curve scrolled into view independently
+const curveObs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){drawCurve();curveObs.unobserve(e.target);}});},{threshold:.4});
+const cv=document.getElementById('curve'); if(cv)curveObs.observe(cv);
+
+/* hold-to-reveal */
+document.querySelectorAll('.hcard').forEach(card=>{
+  const back=card.getAttribute('data-back');
+  card.querySelector('.back p').textContent=back;
+  const fill=card.querySelector('.fill');
+  let timer=null,start=null,raf=null;
+  const HOLD=620;
+  function begin(e){
+    if(card.classList.contains('open'))return;
+    e.preventDefault();
+    start=Date.now();
+    (function step(){
+      const p=Math.min((Date.now()-start)/HOLD,1);
+      fill.style.width=(p*100)+'%';
+      if(p<1){raf=requestAnimationFrame(step);}
+      else{open();}
+    })();
+  }
+  function cancel(){
+    if(card.classList.contains('open'))return;
+    if(raf)cancelAnimationFrame(raf);
+    fill.style.width='0%';
+  }
+  function open(){
+    if(raf)cancelAnimationFrame(raf);
+    card.classList.add('open');
+  }
+  card.addEventListener('touchstart',begin,{passive:false});
+  card.addEventListener('touchend',cancel);
+  card.addEventListener('touchcancel',cancel);
+  card.addEventListener('mousedown',begin);
+  card.addEventListener('mouseup',cancel);
+  card.addEventListener('mouseleave',cancel);
+  // quick tap (released before hold completes) gently nudges the hint instead of opening
+  card.addEventListener('click',()=>{
+    if(card.classList.contains('open'))return;
+    const hint=card.querySelector('.hint');
+    if(hint){ hint.textContent='Hold'; hint.style.color='var(--plum)'; hint.animate([{transform:'scale(1)'},{transform:'scale(1.25)'},{transform:'scale(1)'}],{duration:380,easing:'ease'}); setTimeout(()=>{hint.style.color='';},700); }
+  });
+});
+
+/* expandable */
+function toggleE(head){ head.parentNode.classList.toggle('open'); }
+
+/* klaviyo */
+async function capture(){
+  const email=document.getElementById('email').value.trim();
+  const btn=document.getElementById('submitBtn');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){document.getElementById('email').style.borderColor='#A9404A';document.getElementById('email').focus();return;}
+  btn.textContent='One moment\u2026';btn.style.opacity='.7';
+  try{
+    await fetch('https://a.klaviyo.com/client/subscriptions/?company_id='+KLAVIYO_COMPANY_ID,{
+      method:'POST',headers:{'Content-Type':'application/json','revision':'2024-10-15'},
+      body:JSON.stringify({data:{type:'subscription',attributes:{profile:{data:{type:'profile',attributes:{email:email}}}},relationships:{list:{data:{type:'list',id:KLAVIYO_LIST_ID}}}}})
+    });
+  }catch(e){}
+  document.getElementById('capture').style.display='none';
+  document.getElementById('okcap').style.display='block';
+}
+</script>
+</body>
+</html>
