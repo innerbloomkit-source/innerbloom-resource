@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6B2D45">
+<title>Questions To Ask Your Doctor — InnerBloom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#6B2D45;--plum-deep:#561F35;--cream:#FAF8F5;--cream-dim:#F1ECE4;
+    --gold:#A97340;--gold-soft:#C79466;--ink:#3A2630;--line:rgba(107,45,69,.16);
+    --good:#7C8B6B;--hard:#9A5560;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  .wrap{max-width:560px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+  h1{font-family:'Cormorant Garamond';font-weight:500;letter-spacing:-.01em;line-height:1.08;}
+  h2{font-family:'Cormorant Garamond';font-weight:500;font-size:28px;line-height:1.18;color:var(--plum);letter-spacing:-.01em;}
+  h3{font-family:'DM Sans';font-weight:600;font-size:14px;letter-spacing:.02em;}
+  em{font-style:italic;}strong{font-weight:600;}
+
+  .screen{display:none;flex-direction:column;flex:1;}
+  .screen.active{display:flex;animation:fade .5s ease both;}
+  @keyframes fade{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+  .pad{padding:0 26px;}
+  .eyebrow{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .rule{width:34px;height:1px;background:var(--line);margin:16px 0 22px;}
+
+  /* HERO (browse top) */
+  .hero{padding:54px 26px 18px;}
+  .hero .eyebrow{margin-bottom:18px;}
+  .hero h1{font-size:36px;color:var(--plum);margin-bottom:14px;}
+  .hero .lead{font-size:15.5px;color:var(--ink);}
+  .hero .pull{font-family:'Cormorant Garamond';font-style:italic;font-size:21px;color:var(--gold);line-height:1.35;margin-top:18px;}
+
+  .howto{background:var(--cream-dim);border-radius:13px;padding:14px 17px;margin:22px 26px 0;font-size:13.5px;color:var(--ink);line-height:1.5;display:flex;gap:11px;align-items:flex-start;}
+  .howto .dot{flex-shrink:0;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-top:7px;}
+  .howto strong{color:var(--plum);}
+
+  /* category nav — horizontal scroll, drag + wheel on desktop, swipe on mobile */
+  .nav{padding:20px 26px 6px;display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;cursor:grab;-webkit-overflow-scrolling:touch;}
+  .nav::-webkit-scrollbar{display:none;}
+  .nav.dragging{cursor:grabbing;}
+  .chip{flex-shrink:0;background:var(--cream);border:1px solid var(--line);color:var(--ink);border-radius:20px;padding:8px 15px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .2s ease;font-family:'DM Sans';user-select:none;}
+  .chip.active{background:var(--plum);border-color:var(--plum);color:var(--cream);}
+
+  /* question cards */
+  .qsec{padding:14px 26px 130px;}
+  .qcard{border:1px solid var(--line);border-radius:15px;margin-bottom:12px;background:var(--cream);overflow:hidden;transition:border-color .2s ease,background .2s ease;animation:fade .4s ease both;}
+  .qcard.added{border-color:var(--plum);background:rgba(107,45,69,.04);}
+  .qtext{font-size:15.5px;font-weight:600;color:var(--plum);line-height:1.42;padding:17px 18px 0;}
+  .qctrls{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 16px;gap:12px;}
+  .whytoggle{font-size:14.5px;color:var(--gold);background:none;border:none;cursor:pointer;font-family:'DM Sans';font-weight:600;display:flex;align-items:center;gap:6px;padding:0;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(169,115,64,.4);}
+  .whytoggle .arr{transition:transform .3s ease;display:inline-block;font-size:11px;}
+  .qcard.open-why .whytoggle .arr{transform:rotate(180deg);}
+  .addbtn{flex-shrink:0;border:1.5px solid var(--plum);background:none;color:var(--plum);border-radius:11px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';transition:all .2s ease;display:flex;align-items:center;gap:6px;}
+  .addbtn .ic{width:13px;height:13px;display:flex;align-items:center;justify-content:center;}
+  .qcard.added .addbtn{background:var(--plum);color:var(--cream);}
+  .why{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.22,1,.36,1);background:var(--cream-dim);}
+  .why .winner{padding:16px 18px;}
+  .why-label{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:5px;}
+  .why p{font-size:13.5px;color:var(--ink);line-height:1.55;}
+  .qcard.open-why .why{max-height:280px;}
+
+  /* sticky bottom bar */
+  .stickybar{position:fixed;bottom:0;left:0;right:0;z-index:30;display:flex;justify-content:center;padding:14px 20px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(0deg,var(--cream) 70%,rgba(250,248,245,0));}
+  .stickybar .inner{width:100%;max-width:512px;}
+  .btn{appearance:none;border:none;cursor:pointer;font-family:'DM Sans';font-weight:500;font-size:16px;border-radius:14px;padding:17px 22px;width:100%;text-align:center;transition:transform .15s ease,opacity .25s ease;text-decoration:none;display:block;}
+  .btn-primary{background:var(--plum);color:var(--cream);box-shadow:0 6px 22px rgba(107,45,69,.22);}
+  .btn-primary:active{transform:scale(.98);}
+  .btn-primary:disabled{opacity:.45;box-shadow:none;}
+  .btn-outline{background:none;color:var(--plum);border:1.5px solid var(--plum);}
+
+  /* MY CARD screen */
+  .topnav{display:flex;align-items:center;justify-content:space-between;padding:22px 26px 0;}
+  .backbtn{font-size:13px;color:var(--gold);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-family:'DM Sans';}
+  .cardhead{padding:24px 26px 0;}
+  .cardhead h1{font-size:32px;color:var(--plum);margin-bottom:8px;}
+  .cardhead p{font-size:15px;color:var(--ink);}
+  .mycard{padding:24px 26px 130px;}
+  .group{margin-bottom:26px;}
+  .group-h{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:14px;}
+  .myq{display:flex;gap:11px;margin-bottom:14px;}
+  .myq .mk{flex-shrink:0;color:var(--gold);font-family:'Cormorant Garamond';font-size:18px;line-height:1.3;}
+  .myq .mt{font-size:15px;color:var(--plum);font-weight:500;line-height:1.42;}
+  .empty{text-align:center;padding:40px 24px;}
+  .empty p{font-size:15px;color:var(--gold-soft);font-style:italic;line-height:1.5;}
+
+  .savednote{background:var(--cream-dim);border-radius:13px;padding:14px 17px;margin:0 0 26px;font-size:13px;color:var(--ink);line-height:1.5;display:flex;gap:11px;align-items:flex-start;}
+  .savednote .dot{flex-shrink:0;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-top:6px;}
+  .savednote strong{color:var(--plum);}
+
+  /* what to listen for */
+  .listen{margin-top:8px;}
+  .listen-h{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:16px;}
+  .lcard{border-radius:15px;padding:18px 20px;margin-bottom:12px;}
+  .lcard.good{background:rgba(124,139,107,.10);border:1px solid rgba(124,139,107,.35);}
+  .lcard.bad{background:rgba(154,85,96,.08);border:1px solid rgba(154,85,96,.3);}
+  .lcard .lh{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+  .lcard .lh .d{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .lcard.good .d{background:var(--good);}.lcard.bad .d{background:var(--hard);}
+  .lcard .lh h3{font-size:14px;font-weight:600;color:var(--plum);}
+  .lcard p{font-size:14px;color:var(--ink);line-height:1.5;}
+  .lcard .reassure{margin-top:11px;font-family:'Cormorant Garamond';font-style:italic;font-size:17.5px;color:var(--plum);line-height:1.4;}
+
+  /* CTA screen */
+  .ctawrap{padding:30px 26px 130px;}
+  .conv{background:var(--cream-dim);border-radius:18px;padding:26px 22px;margin-top:26px;}
+  .conv .tracker-bridge{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:22px;}
+  .conv h3{color:var(--plum);font-size:16px;margin-bottom:4px;}
+  .conv p{font-size:15px;margin-top:10px;}
+  .field{margin-top:18px;}
+  .field input{width:100%;font-family:'DM Sans';font-size:16px;padding:17px 18px;border:1px solid var(--line);border-radius:14px;background:var(--cream);color:var(--ink);transition:border .2s ease;}
+  .field input:focus{outline:none;border-color:var(--plum);}
+  .micro{font-size:12.5px;color:var(--gold-soft);margin-top:14px;text-align:center;}
+  .ok-cap{display:none;text-align:center;padding:8px 0;animation:fade .6s ease both;}
+  .insta{font-size:13px;letter-spacing:.12em;color:var(--gold);font-weight:600;margin-bottom:14px;}
+  .closing{text-align:center;padding:44px 30px 26px;}
+  .closing .line{font-family:'Cormorant Garamond';font-style:italic;font-size:23px;color:var(--plum);line-height:1.35;}
+  .foot{text-align:center;padding:10px 26px 50px;}
+  .foot a{color:var(--plum);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:1px;}
+  .disclaimer{font-size:11.5px;line-height:1.5;color:var(--gold-soft);margin-top:22px;text-align:center;}
+  @media(max-width:360px){.hero h1{font-size:31px;}h2{font-size:25px;}.cardhead h1{font-size:28px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= SCREEN 1: BROWSE & BUILD ================= -->
+  <section class="screen active" id="s-browse">
+    <div class="hero">
+      <div class="eyebrow">InnerBloom &mdash; Doctor Preparation Guide</div>
+      <h1>Questions to ask your doctor about perimenopause.</h1>
+      <div class="lead">Most perimenopause appointments end one of two ways: a prescription, or a dismissal. These questions are designed to make a third outcome possible &mdash; a real clinical conversation.</div>
+      <div class="pull">The answers will tell you a great deal &mdash; not just about your hormones, but about whether this is a doctor who understands this stage of life.</div>
+    </div>
+    <div class="howto">
+      <div class="dot"></div>
+      <div>Pick a category for what you are experiencing. Tap <strong>Why ask this</strong> to understand each one, and <strong>Add</strong> the questions that fit you. They build into your own card to take in.</div>
+    </div>
+    <div class="nav" id="nav"></div>
+    <div class="qsec"><div id="questions"></div></div>
+  </section>
+
+  <!-- ================= SCREEN 2: MY CARD ================= -->
+  <section class="screen" id="s-card">
+    <div class="topnav">
+      <button class="backbtn" onclick="go('s-browse')">&larr; Add more questions</button>
+    </div>
+    <div class="cardhead">
+      <div class="eyebrow">Your Card</div>
+      <h1 style="margin-top:10px">The questions you are taking in.</h1>
+      <p id="cardSub">Read the question. If it fits, you will know. Glance at the rest when you need them.</p>
+    </div>
+    <div class="mycard">
+      <div class="savednote">
+        <div class="dot"></div>
+        <div><strong>Your card saves on this device.</strong> Open this page in the same browser before your appointment and it will be waiting for you.</div>
+      </div>
+      <div id="cardGroups"></div>
+      <div class="empty" id="cardEmpty" style="display:none">
+        <p>You have not added any questions yet. Go back and tap Add on the ones that fit your situation &mdash; they will appear here as your card.</p>
+        <button class="btn btn-outline" style="margin-top:20px" onclick="go('s-browse')">Browse the questions</button>
+      </div>
+
+      <div class="listen" id="listenBlock">
+        <div class="rule"></div>
+        <div class="listen-h">What To Listen For</div>
+        <div class="lcard good">
+          <div class="lh"><span class="d"></span><h3>If the appointment goes well</h3></div>
+          <p>A doctor who explores cycle timing, acknowledges the limits of standard blood testing, and treats your symptoms as a connected pattern rather than separate complaints is one worth returning to. Note what they say. Ask them to document their reasoning.</p>
+        </div>
+        <div class="lcard bad">
+          <div class="lh"><span class="d"></span><h3>If it does not go well</h3></div>
+          <p>A doctor who dismisses these questions, or offers an antidepressant without exploring the hormonal component first, is not giving you the standard of care you deserve.</p>
+          <div class="reassure">You are not being difficult. You are asking legitimate clinical questions &mdash; and you have every right to a second opinion from a doctor who understands perimenopausal hormone fluctuation.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SCREEN 3: CTA ================= -->
+  <section class="screen" id="s-cta">
+    <div class="topnav">
+      <button class="backbtn" onclick="go('s-card')">&larr; Back to my card</button>
+    </div>
+    <div class="ctawrap">
+      <div class="eyebrow">What Comes Next</div>
+      <h1 style="font-size:32px;color:var(--plum);margin-top:12px">The one thing that changes every appointment.</h1>
+      <div class="rule"></div>
+      <p style="font-size:16px;color:var(--ink)">Symptoms get dismissed. Data gets taken seriously. The single most valuable thing you can bring to any appointment is <strong>30 days of your own pattern data</strong> &mdash; which symptoms, when in your cycle, what correlates with what. It changes the entire conversation.</p>
+
+      <div class="conv">
+        <div class="tracker-bridge">
+          <h3>Walk in with data, not just symptoms</h3>
+          <p>The free InnerBloom Pattern Tracker gives you exactly that &mdash; 30 days of your own pattern, ready to show a doctor.</p>
+          <a class="btn btn-outline" style="margin-top:16px" href="https://innerbloomkit-source.github.io/innerbloom-resource/pattern-tracker.html">Open the free Pattern Tracker</a>
+        </div>
+        <div id="capture">
+          <h2 style="font-size:24px">And the part that makes the data mean something.</h2>
+          <p>InnerBloom is building a perimenopause clarity kit that connects your symptoms to what your hormones are actually doing &mdash; then shows you how to support your body based on your own pattern. So you walk into that room informed, and walk out with a real plan.</p>
+          <p>Because the goal is not just to be heard once. It is to feel like yourself again &mdash; and stop having to fight to be believed.</p>
+          <div class="field"><input type="email" id="email" placeholder="Your email" autocomplete="email" inputmode="email"></div>
+          <div class="micro">No spam. No noise. Just the update when it matters.</div>
+        </div>
+        <div class="ok-cap" id="okcap">
+          <div class="insta">@innerbloom_kit</div>
+          <h2 style="font-size:23px">You are on the list.</h2>
+          <p style="font-size:15px;margin-top:10px">Take your questions in. You are more prepared than most women ever get to be. We will be in touch when there is more.</p>
+        </div>
+      </div>
+
+      <div class="closing">
+        <div class="line">You are not being difficult.<br>You are asking the right questions.</div>
+      </div>
+      <div class="foot">
+        <a href="https://innerbloomkit.com" target="_blank" rel="noopener">innerbloomkit.com</a>
+        <div class="disclaimer">These questions are not a diagnostic tool and are not intended to replace medical advice. They are a preparation resource to support a more informed conversation with your clinician.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GLOBAL STICKY CTA — adapts per screen -->
+  <div class="stickybar" id="stickybar">
+    <div class="inner"><button class="btn btn-primary" id="stickyBtn"></button></div>
+  </div>
+
+</div>
+
+<script>
+const KLAVIYO_COMPANY_ID="XmzfxG";
+const KLAVIYO_LIST_ID="Sk6BSM"; // Waiting Room Card (DOCTORS)
+const STORE_KEY="ib_waiting_room_v2";
+
+const CATS=[
+  {id:"all",label:"All"},
+  {id:"picture",label:"The big picture"},
+  {id:"sleep",label:"Sleep"},
+  {id:"brain",label:"Brain fog"},
+  {id:"mood",label:"Mood & anxiety"},
+  {id:"energy",label:"Energy & body"},
+  {id:"testing",label:"Testing"},
+  {id:"treatment",label:"Treatment & next steps"},
+];
+const CAT_LABEL={};CATS.forEach(c=>CAT_LABEL[c.id]=c.label);
+const GROUP_ORDER=["picture","sleep","brain","mood","energy","testing","treatment"];
+
+const QUESTIONS=[
+  {id:"q1",cats:["picture"],q:"My symptoms feel worse at a specific point in my cycle each month. Is that consistent with perimenopause even though my periods are still regular?",why:"Perimenopause can begin years before periods change. A doctor who understands this will engage with the cycle timing rather than dismissing you because your cycle is still regular."},
+  {id:"q2",cats:["picture","testing"],q:"Are there other conditions that can present like perimenopause that we should rule out at the same time?",why:"Thyroid disorders, iron deficiency and others can mimic perimenopause almost exactly. This invites a proper differential rather than a single-pathway answer, and shows you are not catastrophising."},
+  {id:"q3",cats:["picture"],q:"Which of my symptoms would you consider consistent with hormonal fluctuation, and which, if any, would warrant further investigation?",why:"Asks the doctor to think in symptom clusters and flag any genuine red flags, demonstrating clinical responsibility and pattern-based thinking at the same time."},
+  {id:"q4",cats:["sleep"],q:"I am waking consistently between 2am and 4am and cannot get back to sleep. Could this be hormonal rather than general insomnia?",why:"Distinguishes pattern-specific waking from ordinary insomnia, and invites the doctor to explore hormonal mechanisms, such as progesterone and cortisol, rather than defaulting to a sleep referral."},
+  {id:"q5",cats:["sleep"],q:"I have tried the usual sleep advice and sleep aids and they have not touched it. Does that change what might be going on?",why:"Melatonin and sleep hygiene target falling asleep, not the mid-sleep hormonal waking pattern. A doctor who understands this will explore the hormonal angle rather than simply escalating sleep medication."},
+  {id:"q6",cats:["brain"],q:"Brain fog and word-finding difficulty have become noticeably worse. Is this a known perimenopause symptom, and how do we tell it apart from something that needs further investigation?",why:"Estrogen plays a role in how the brain processes and retrieves information. Asking for calibration between expected hormonal changes and genuine warning signs shows you want a nuanced answer, not blanket reassurance or alarm."},
+  {id:"q7",cats:["brain"],q:"How do we tell the difference between perimenopausal brain fog and early cognitive decline, so I can stop worrying it is something worse?",why:"Names the fear directly and asks the doctor to address it head-on. A good clinician will explain why hormonal cognitive symptoms differ from neurological decline rather than leaving you to catastrophise alone."},
+  {id:"q8",cats:["mood"],q:"Could my anxiety and low mood be driven by hormonal fluctuation rather than, or as well as, a psychological cause?",why:"Perimenopausal women are significantly over-prescribed antidepressants when the hormonal component has not been explored. This asks whether both possibilities have genuinely been considered."},
+  {id:"q9",cats:["mood"],q:"Before we consider an antidepressant, can we explore whether addressing the hormonal component might help the mood symptoms too?",why:"Ensures the hormonal pathway is considered first or alongside, given how often it is skipped in favour of the faster prescription."},
+  {id:"q10",cats:["energy","testing"],q:"Given my symptoms around energy, focus and mood, would assessing my testosterone add anything useful to the picture?",why:"Testosterone is rarely included in standard female hormone panels despite its role in energy, focus, mood and libido. Framing it symptom-first makes it a clinical question, not a request driven by social media."},
+  {id:"q11",cats:["energy","testing"],q:"My periods have been heavier or less predictable. Could that be affecting my iron levels, and should we check my ferritin, not just a standard blood count?",why:"Heavier perimenopausal bleeding is a common cause of low iron, which itself causes fatigue, brain fog and breathlessness. Ferritin reflects your iron stores and can be low even when a standard blood count looks normal."},
+  {id:"q12",cats:["energy","testing"],q:"Could a thyroid issue be overlapping with this? Have we checked my thyroid fully, including TSH and free T4?",why:"Thyroid dysfunction becomes more common in midlife and produces fatigue, weight change, low mood and brain fog that overlap almost exactly with perimenopause. It is worth ruling in or out properly."},
+  {id:"q13",cats:["testing"],q:"My blood tests came back normal. Can hormone levels appear normal on a standard test even while I am having significant symptoms?",why:"FSH and estrogen fluctuate dramatically in perimenopause, so a single normal result does not rule it out. Guidelines actually advise against using FSH to diagnose perimenopause in women over 45 with typical symptoms. This asks the doctor to explain the test's limits rather than using it to close the conversation."},
+  {id:"q14",cats:["testing"],q:"Is there a point in my cycle when hormone testing would give more accurate information than others?",why:"Most hormone testing is done without regard to cycle timing, which can make results misleading. This reveals whether the doctor understands that when you test matters as much as what you test."},
+  {id:"q15",cats:["treatment"],q:"Which non-hormonal approaches have the strongest evidence for the specific symptom pattern I am experiencing?",why:"Opens a third lane beyond hormone therapy or dismissal, and asks the doctor to demonstrate whether they have a genuine grasp of evidence-based options, such as targeted cognitive behavioural approaches for sleep."},
+  {id:"q16",cats:["treatment"],q:"Given my age and symptoms, am I a candidate for hormone therapy, and what are the actual risks and benefits for someone in my situation?",why:"For many women under 60, or within ten years of menopause, the benefits of hormone therapy can outweigh the risks. Outdated interpretations of older studies mean many women are wrongly told it is too dangerous. This asks for a current, personalised risk-benefit conversation."},
+  {id:"q17",cats:["treatment"],q:"What symptoms would you want me to come back about, or treat as urgent, rather than assume are hormonal?",why:"A responsible answer gives you clear safety guidance and shows the doctor is thinking about your whole health, not waving everything away as just hormones."},
+];
+const QBYID={};QUESTIONS.forEach(q=>QBYID[q.id]=q);
+
+let added={};
+let activeCat="all";
+
+function load(){ try{ added=JSON.parse(localStorage.getItem(STORE_KEY))||{}; }catch(e){ added={}; } }
+function persist(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(added)); }catch(e){} }
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  updateSticky(id);
+}
+
+let currentScreen='s-browse';
+function updateSticky(id){
+  currentScreen=id;
+  const bar=document.getElementById('stickybar');
+  const btn=document.getElementById('stickyBtn');
+  if(id==='s-cta' && document.getElementById('okcap').style.display==='block'){ bar.style.display='none'; return; }
+  bar.style.display='flex';
+  if(id==='s-browse'){
+    const n=Object.keys(added).length;
+    btn.textContent='View my card ('+n+')';
+    btn.onclick=openCard;
+  } else if(id==='s-card'){
+    const n=Object.keys(added).length;
+    btn.textContent = n? 'What comes after the appointment' : 'Browse the questions';
+    btn.onclick = n? (()=>go('s-cta')) : (()=>go('s-browse'));
+  } else if(id==='s-cta'){
+    btn.textContent='Tell me when it is ready';
+    btn.onclick=capture;
+  }
+}
+
+function renderNav(){
+  const nav=document.getElementById('nav'); nav.innerHTML='';
+  CATS.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='chip'+(c.id===activeCat?' active':'');
+    b.textContent=c.label;
+    b.onclick=()=>{ if(navDragged)return; activeCat=c.id; renderNav(); renderQuestions(); };
+    nav.appendChild(b);
+  });
+}
+
+function renderQuestions(){
+  const wrap=document.getElementById('questions'); wrap.innerHTML='';
+  const list=QUESTIONS.filter(q=>activeCat==='all'||q.cats.includes(activeCat));
+  list.forEach(q=>{
+    const card=document.createElement('div');
+    card.className='qcard'+(added[q.id]?' added':'');
+    card.innerHTML=
+      '<div class="qtext">'+q.q+'</div>'+
+      '<div class="qctrls">'+
+        '<button class="whytoggle">Why ask this <span class="arr">&#9662;</span></button>'+
+        '<button class="addbtn"><span class="ic">'+(added[q.id]?'&#10003;':'+')+'</span>'+(added[q.id]?'Added':'Add')+'</button>'+
+      '</div>'+
+      '<div class="why"><div class="winner"><div class="why-label">Why ask this</div><p>'+q.why+'</p></div></div>';
+    card.querySelector('.whytoggle').onclick=()=>card.classList.toggle('open-why');
+    card.querySelector('.addbtn').onclick=()=>{
+      if(added[q.id]){delete added[q.id];}else{added[q.id]=true;}
+      persist();
+      card.classList.toggle('added',!!added[q.id]);
+      const btn=card.querySelector('.addbtn');
+      btn.innerHTML='<span class="ic">'+(added[q.id]?'&#10003;':'+')+'</span>'+(added[q.id]?'Added':'Add');
+      updateCount();
+    };
+    wrap.appendChild(card);
+  });
+}
+
+function updateCount(){
+  if(currentScreen==='s-browse'){ updateSticky('s-browse'); }
+}
+
+function openCard(){
+  go('s-card');
+  renderCard();
+}
+
+function renderCard(){
+  const wrap=document.getElementById('cardGroups');wrap.innerHTML='';
+  const ids=Object.keys(added);
+  const empty=document.getElementById('cardEmpty');
+  const listen=document.getElementById('listenBlock');
+  const sub=document.getElementById('cardSub');
+  if(!ids.length){
+    empty.style.display='block';
+    listen.style.display='none';
+    sub.style.display='none';
+    return;
+  }
+  empty.style.display='none';
+  listen.style.display='block';
+  sub.style.display='block';
+
+  GROUP_ORDER.forEach(cat=>{
+    const inGroup=QUESTIONS.filter(q=>added[q.id] && q.cats[0]===cat);
+    if(!inGroup.length)return;
+    const g=document.createElement('div');g.className='group';
+    let html='<div class="group-h">'+CAT_LABEL[cat]+'</div>';
+    inGroup.forEach(q=>{ html+='<div class="myq"><span class="mk">&bull;</span><span class="mt">'+q.q+'</span></div>'; });
+    g.innerHTML=html;
+    wrap.appendChild(g);
+  });
+}
+
+/* klaviyo */
+async function capture(){
+  const email=document.getElementById('email').value.trim();
+  const btn=document.getElementById('stickyBtn');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+    document.getElementById('email').style.borderColor='#A9404A';
+    document.getElementById('email').scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('email').focus();
+    return;
+  }
+  btn.textContent='One moment\u2026';btn.style.opacity='.7';
+  try{
+    await fetch('https://a.klaviyo.com/client/subscriptions/?company_id='+KLAVIYO_COMPANY_ID,{
+      method:'POST',headers:{'Content-Type':'application/json','revision':'2024-10-15'},
+      body:JSON.stringify({data:{type:'subscription',attributes:{profile:{data:{type:'profile',attributes:{email:email}}}},relationships:{list:{data:{type:'list',id:KLAVIYO_LIST_ID}}}}})
+    });
+  }catch(e){}
+  document.getElementById('capture').style.display='none';
+  document.getElementById('okcap').style.display='block';
+  document.getElementById('stickybar').style.display='none';
+}
+
+/* nav drag-to-scroll (desktop) + wheel-to-horizontal, swipe works natively on mobile */
+let navDragged=false;
+(function(){
+  const nav=document.getElementById('nav');
+  let down=false,startX=0,startScroll=0,moved=0;
+  nav.addEventListener('mousedown',e=>{down=true;navDragged=false;moved=0;startX=e.pageX;startScroll=nav.scrollLeft;nav.classList.add('dragging');});
+  window.addEventListener('mouseup',()=>{down=false;nav.classList.remove('dragging');setTimeout(()=>{navDragged=false;},50);});
+  nav.addEventListener('mousemove',e=>{if(!down)return;e.preventDefault();const dx=e.pageX-startX;moved+=Math.abs(dx);nav.scrollLeft=startScroll-dx;if(Math.abs(dx)>5)navDragged=true;});
+  nav.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){nav.scrollLeft+=e.deltaY;e.preventDefault();}},{passive:false});
+})();
+
+/* init */
+load();
+renderNav();
+renderQuestions();
+updateSticky('s-browse');
+</script>
+</body>
+</html>
