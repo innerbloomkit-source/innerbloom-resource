@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6B2D45">
+<title>The InnerBloom Pattern Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#6B2D45;--plum-deep:#561F35;--cream:#FAF8F5;--cream-dim:#F1ECE4;
+    --gold:#A97340;--gold-soft:#C79466;--ink:#3A2630;--line:rgba(107,45,69,.16);
+    --good:#7C8B6B;--mixed:#C79466;--hard:#9A5560;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  body{overflow-x:hidden;}
+  .wrap{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+  .topbar{padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between;min-height:50px;}
+  .brand{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .about-link{font-size:12px;color:var(--gold-soft);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-family:'DM Sans';}
+  .screen{flex:1;padding:30px 24px 48px;display:none;flex-direction:column;}
+  .screen.active{display:flex;animation:rise .55s cubic-bezier(.22,1,.36,1) both;}
+  @keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,139,107,.55);}70%{box-shadow:0 0 0 9px rgba(124,139,107,0);}100%{box-shadow:0 0 0 0 rgba(124,139,107,0);}}
+  .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:18px;}
+  .rule{width:34px;height:1px;background:var(--line);margin:14px 0 22px;}
+  h1{font-family:'Cormorant Garamond';font-weight:500;font-size:37px;line-height:1.1;color:var(--plum);letter-spacing:-.01em;}
+  h2{font-family:'Cormorant Garamond';font-weight:500;font-size:28px;line-height:1.18;color:var(--plum);letter-spacing:-.01em;}
+  h3{font-family:'DM Sans';font-weight:600;font-size:14px;letter-spacing:.02em;color:var(--plum);}
+  .lede{font-size:16px;}.lede p{margin-top:14px;}
+  em{font-style:italic;color:var(--plum);}strong{font-weight:600;color:var(--plum);}
+  .btn{appearance:none;border:none;cursor:pointer;font-family:'DM Sans';font-weight:500;font-size:16px;border-radius:14px;padding:18px 22px;transition:transform .15s ease,box-shadow .25s ease,opacity .25s ease;width:100%;text-align:center;}
+  .btn-primary{background:var(--plum);color:var(--cream);box-shadow:0 6px 22px rgba(107,45,69,.22);}
+  .btn-primary:active{transform:scale(.98);}
+  .note{background:var(--cream-dim);border-radius:14px;padding:16px 18px;margin-top:26px;display:flex;gap:12px;align-items:flex-start;}
+  .note .dot{flex-shrink:0;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-top:8px;}
+  .note p{font-size:14px;line-height:1.5;color:var(--ink);}
+  .note strong{color:var(--plum);}
+  .micro{font-size:12.5px;color:var(--gold-soft);margin-top:16px;text-align:center;}
+  .thead{display:flex;justify-content:space-between;align-items:flex-end;}
+  .daycount{font-family:'Cormorant Garamond';font-size:30px;color:var(--plum);font-weight:600;line-height:1;}
+  .daycount small{font-family:'DM Sans';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);font-weight:600;display:block;margin-bottom:5px;}
+  .cycle-pill{font-size:12px;letter-spacing:.05em;color:var(--gold);background:var(--cream-dim);padding:7px 13px;border-radius:20px;font-weight:600;white-space:nowrap;}
+  .journey{margin-top:20px;}
+  .journey-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+  .journey-row .jr-day{font-size:12.5px;letter-spacing:.04em;color:var(--plum);font-weight:600;}
+  .journey-row .jr-left{font-size:11.5px;color:var(--gold-soft);font-weight:500;}
+  .journey-track{height:5px;background:var(--cream-dim);border-radius:5px;overflow:hidden;}
+  .journey-fill{height:100%;width:0;background:var(--good);border-radius:5px;transition:width .8s cubic-bezier(.22,1,.36,1);}
+  .reset-area{margin-top:28px;padding-top:26px;border-top:1px solid var(--line);text-align:center;}
+  .reset-area .btn{background:none;color:var(--gold);border:1px solid var(--line);box-shadow:none;}
+  .reset-area .btn:active{transform:scale(.98);}
+  .reset-confirm{display:none;}
+  .reset-confirm p{font-size:14px;color:var(--ink);margin-bottom:14px;}
+  .reset-confirm .rc-row{display:flex;gap:10px;}
+  .reset-confirm .rc-row .btn{flex:1;font-size:15px;padding:15px;}
+  .rc-yes{background:var(--hard)!important;color:#fff!important;border:none!important;}
+  .rc-no{background:none!important;color:var(--gold-soft)!important;border:1px solid var(--line)!important;}
+  .today-label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft);font-weight:600;margin:28px 0 4px;}
+  .today-date{font-family:'Cormorant Garamond';font-size:22px;color:var(--plum);margin-bottom:6px;}
+  .nudge{background:var(--plum);border-radius:14px;padding:14px 18px;margin:16px 0 4px;display:flex;align-items:center;gap:12px;}
+  .nudge p{font-size:14px;color:var(--cream);line-height:1.4;}
+  .nudge .dot{width:8px;height:8px;border-radius:50%;background:var(--gold-soft);flex-shrink:0;}
+  .metric{margin-top:22px;}
+  .metric .m-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
+  .metric .m-name{font-size:14.5px;font-weight:600;color:var(--ink);}
+  .metric .m-hint{font-size:11.5px;color:var(--gold-soft);}
+  .scale{display:flex;gap:8px;}
+  .scale button{flex:1;border:1px solid var(--line);background:var(--cream);border-radius:11px;padding:12px 4px;font-family:'DM Sans';font-size:12.5px;font-weight:500;color:var(--ink);cursor:pointer;transition:all .18s ease;line-height:1.25;}
+  .scale button:active{transform:scale(.95);}
+  .scale button.sel[data-v="1"]{background:var(--hard);border-color:var(--hard);color:#fff;}
+  .scale button.sel[data-v="2"]{background:var(--mixed);border-color:var(--mixed);color:#fff;}
+  .scale button.sel[data-v="3"]{background:var(--good);border-color:var(--good);color:#fff;}
+  .period{display:flex;align-items:center;justify-content:space-between;background:var(--cream-dim);border-radius:14px;padding:14px 18px;margin:24px 0 26px;}
+  .period .p-name{font-size:14.5px;font-weight:600;color:var(--ink);}
+  .toggle{width:50px;height:28px;border-radius:20px;background:#d8cfc4;border:none;cursor:pointer;position:relative;transition:background .25s ease;flex-shrink:0;}
+  .toggle .knob{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .25s cubic-bezier(.22,1.4,.36,1);box-shadow:0 1px 3px rgba(0,0,0,.2);}
+  .toggle.on{background:var(--hard);}
+  .toggle.on .knob{transform:translateX(22px);}
+  .savemsg{text-align:center;font-size:14px;color:var(--good);min-height:20px;margin-top:16px;font-weight:600;opacity:0;transition:opacity .4s ease;}
+  .savemsg.show{opacity:1;animation:rise .5s ease both;}
+  .logged-state{background:rgba(124,139,107,.12);border:1px solid rgba(124,139,107,.4);border-radius:14px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;}
+  .logged-state .ls-text{font-size:15px;font-weight:600;color:var(--good);}
+  .logged-state .ls-edit{font-size:13px;color:var(--gold);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-family:'DM Sans';}
+  .grid-wrap{margin-top:34px;padding-top:30px;border-top:1px solid var(--line);overflow:hidden;}
+  .legend{display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;}
+  .legend span{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--gold-soft);font-weight:500;}
+  .legend i{width:11px;height:11px;border-radius:4px;display:inline-block;}
+  .legend .l-done{background:var(--good);}
+  .legend .l-today{background:rgba(169,115,64,.12);border:2px solid var(--gold);}
+  .legend .l-todo{background:var(--cream);border:1px solid var(--line);}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:18px;width:100%;}
+  .cell{aspect-ratio:1;min-width:0;border-radius:9px;background:var(--cream-dim);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--gold-soft);cursor:pointer;transition:background .18s ease,border-color .18s ease,color .18s ease;position:relative;border:1.5px solid transparent;}
+  .cell.done{background:var(--good);border-color:var(--good);color:#fff;}
+  .cell.today{border:2px solid var(--gold);color:var(--gold);font-weight:700;background:rgba(169,115,64,.10);}
+  .cell.todo{background:var(--cream);border-color:var(--line);}
+  .cell.future{opacity:.4;cursor:default;}
+  .cell.period::after{content:'';position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;background:var(--hard);}
+  .cell.done.period::after{background:#fff;}
+  .cell.pulse{animation:pulse .7s ease 2;}
+  .summary-cta{margin-top:30px;}
+  .back{font-size:13px;color:var(--gold);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px;margin-bottom:18px;align-self:flex-start;font-family:'DM Sans';}
+  .stat-row{display:flex;gap:12px;margin-top:20px;}
+  .stat{flex:1;background:var(--cream-dim);border-radius:13px;padding:16px;text-align:center;}
+  .stat .num{font-family:'Cormorant Garamond';font-size:32px;color:var(--plum);font-weight:600;line-height:1;}
+  .stat .cap{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-soft);font-weight:600;margin-top:6px;}
+  .insight{background:var(--cream-dim);border-left:2px solid var(--gold);border-radius:0 12px 12px 0;padding:18px 20px;margin-top:16px;}
+  .insight .lab{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:7px;display:block;}
+  .insight p{font-size:15px;color:var(--ink);}
+  .capture{margin-top:34px;padding-top:30px;border-top:1px solid var(--line);}
+  .capture p{font-size:15px;margin-top:12px;}
+  .field{margin-top:20px;}
+  .field input{width:100%;font-family:'DM Sans';font-size:16px;padding:17px 18px;border:1px solid var(--line);border-radius:14px;background:var(--cream);color:var(--ink);transition:border .2s ease;}
+  .field input:focus{outline:none;border-color:var(--plum);}
+  .ok-cap{display:none;text-align:center;padding:6px 0;animation:rise .6s ease both;}
+  .insta{font-size:13px;letter-spacing:.12em;color:var(--gold);font-weight:600;margin-bottom:16px;}
+  .foot{text-align:center;padding:30px 24px 40px;}
+  .foot a{color:var(--plum);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:1px;}
+  .disclaimer{font-size:11.5px;line-height:1.5;color:var(--gold-soft);margin-top:22px;text-align:center;padding:0 6px;}
+  @media(max-width:360px){h1{font-size:32px;}.scale button{font-size:11.5px;padding:11px 3px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">InnerBloom</div>
+    <button class="about-link" id="aboutBtn" style="display:none" onclick="show('s-intro')">How it works</button>
+  </div>
+
+  <section class="screen active" id="s-intro">
+    <div class="eyebrow">The InnerBloom Pattern Tracker</div>
+    <h1>Your symptoms feel random. They may not be.</h1>
+    <div class="rule"></div>
+    <div class="lede">
+      <p>Most women spend years treating isolated symptoms &mdash; a bad night here, a low mood there &mdash; without ever seeing them side by side.</p>
+      <p>This tracker does one thing: it puts them side by side. You mark your day in under a minute. Over thirty days, the pattern underneath starts to show itself.</p>
+      <p><strong>You don't need to write an essay. A tap is enough.</strong> Not to analyse. Just to notice.</p>
+    </div>
+    <div class="note">
+      <div class="dot"></div>
+      <p><strong>Your entries save automatically on this device.</strong> Day 1 begins the first time you log. Open this page in the <strong>same browser on the same device</strong> each time to keep your data building &mdash; clearing your browser history or switching devices will clear it.</p>
+    </div>
+    <button class="btn btn-primary" style="margin-top:30px" onclick="enterTracker()">Start tracking</button>
+    <div class="micro">Thirty days usually shows something you've never seen before.</div>
+  </section>
+
+  <section class="screen" id="s-track">
+    <div class="thead">
+      <div class="daycount"><small>Days logged</small><span id="dcount">0</span></div>
+      <div class="cycle-pill" id="cyclePill">Cycle day &mdash;</div>
+    </div>
+    <div class="journey">
+      <div class="journey-row"><span class="jr-day" id="jrDay">Day 1 of 30</span><span class="jr-left" id="jrLeft"></span></div>
+      <div class="journey-track"><div class="journey-fill" id="jrFill"></div></div>
+    </div>
+    <div class="today-label" id="logLabel">Logging for</div>
+    <div class="today-date" id="todayDate">Today</div>
+    <div id="nudge"></div>
+    <div id="logArea">
+      <div id="metrics"></div>
+      <div class="period">
+        <span class="p-name">Period today?</span>
+        <button class="toggle" id="periodToggle" onclick="togglePeriod()"><span class="knob"></span></button>
+      </div>
+      <div id="saveArea">
+        <button class="btn btn-primary" id="saveBtn" onclick="saveDay()">Save this day</button>
+        <div class="savemsg" id="savemsg"></div>
+      </div>
+      <div class="logged-state" id="loggedState" style="display:none">
+        <span class="ls-text">&#10003; Logged</span>
+        <button class="ls-edit" onclick="editDay()">Edit</button>
+      </div>
+    </div>
+    <div class="grid-wrap">
+      <h3>Your 30 days</h3>
+      <div class="legend">
+        <span><i class="l-done"></i>Logged</span>
+        <span><i class="l-today"></i>Today</span>
+        <span><i class="l-todo"></i>To log</span>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+    <button class="btn btn-primary summary-cta" onclick="openSummary()">See your pattern so far</button>
+  </section>
+
+  <section class="screen" id="s-summary">
+    <button class="back" onclick="show('s-track')">&larr; Back to tracker</button>
+    <div class="eyebrow">What's Showing So Far</div>
+    <h2 id="sumHead">Your pattern is still forming.</h2>
+    <div class="stat-row">
+      <div class="stat"><div class="num" id="statDays">0</div><div class="cap">Days logged</div></div>
+      <div class="stat"><div class="num" id="statHard">0</div><div class="cap">Harder days</div></div>
+    </div>
+    <div id="insights"></div>
+    <div class="capture" id="capture">
+      <h2 id="capHead">Want this pattern explained &mdash; not just visible?</h2>
+      <div id="capIntro">
+        <p>This tracker shows you <em>that</em> a pattern exists. It can't tell you <em>why</em>.</p>
+        <p>InnerBloom is building the next step: a perimenopause clarity kit that tracks your symptoms <strong>and</strong> your actual hormone levels on the same days &mdash; so the pattern isn't just something you can see, it's something you can finally understand.</p>
+        <p>Leave your email and we'll tell you the moment it's ready.</p>
+      </div>
+      <div class="field"><input type="email" id="email" placeholder="Your email" autocomplete="email" inputmode="email"></div>
+      <button class="btn btn-primary" id="submitBtn" onclick="capture()" style="margin-top:16px">Tell me when it's ready</button>
+      <div class="micro">No spam. No noise. Just the update when it matters.</div>
+    </div>
+    <div class="ok-cap" id="okcap">
+      <div class="insta">@innerbloom_kit</div>
+      <h2>You're on the list.</h2>
+      <p style="font-size:15px;margin-top:12px">Keep tracking in the meantime &mdash; the longer you log, the clearer your pattern becomes. We're building what we wish existed when all of this started feeling confusing.</p>
+    </div>
+
+    <div class="reset-area" id="resetArea" style="display:none">
+      <button class="btn" id="resetBtn" onclick="askReset()">Start a new 30 days</button>
+      <div class="reset-confirm" id="resetConfirm">
+        <p>This clears your current 30 days and starts fresh at Day 1. Your entries can't be recovered.</p>
+        <div class="rc-row">
+          <button class="btn rc-yes" onclick="doReset()">Yes, start fresh</button>
+          <button class="btn rc-no" onclick="cancelReset()">Keep my data</button>
+        </div>
+      </div>
+    </div>
+    <div class="foot">
+      <a href="https://innerbloomkit.com" target="_blank" rel="noopener">innerbloomkit.com</a>
+      <div class="disclaimer">This tracker is for noticing patterns, not diagnosis, and is not a substitute for medical advice. If your symptoms are significantly affecting your life, speak with a clinician who understands perimenopausal hormone fluctuation.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const KLAVIYO_COMPANY_ID="XmzfxG";
+const KLAVIYO_LIST_ID="VYp9ar";
+const STORE_KEY="ib_pattern_tracker_v2";
+const METRICS=[
+  {key:"sleep", name:"Sleep", hint:"How you slept",       labels:["Broken","Patchy","Restful"]},
+  {key:"mood",  name:"Mood",  hint:"How steady you felt", labels:["Volatile","Mixed","Steady"]},
+  {key:"energy",name:"Energy",hint:"What you had to give", labels:["Depleted","Low","Good"]},
+  {key:"body",  name:"Body",  hint:"Physical symptoms",    labels:["Heavy","Some","Clear"]},
+  {key:"mind",  name:"Mind",  hint:"Focus & clarity",      labels:["Foggy","Hazy","Sharp"]},
+];
+const SAVE_MSGS=[
+  "Logged. That's one more dot in the pattern.",
+  "Saved. You don't need an essay \u2014 a mark is enough.",
+  "That's done. The pattern shows in the noticing.",
+  "Logged. Thirty days usually reveals something new.",
+  "Saved. Small and consistent beats perfect and rare.",
+];
+let data={startDate:null,days:{}};
+let draft={};
+let viewDate=null;
+
+function todayISO(d){d=d||new Date();const off=d.getTimezoneOffset();return new Date(d.getTime()-off*60000).toISOString().slice(0,10);}
+function isoPlus(iso,n){const d=new Date(iso+'T00:00');d.setDate(d.getDate()+n);return todayISO(d);}
+function daysBetween(a,b){return Math.round((new Date(b+'T00:00')-new Date(a+'T00:00'))/86400000);}
+function fmtDate(iso){return new Date(iso+'T00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});}
+function load(){try{const d=JSON.parse(localStorage.getItem(STORE_KEY));if(d&&d.days){data=d;}}catch(e){}}
+function persist(){try{localStorage.setItem(STORE_KEY,JSON.stringify(data));}catch(e){}}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('aboutBtn').style.display=(id==='s-intro')?'none':'block';
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function enterTracker(){viewDate=todayISO();show('s-track');renderTracker();}
+function anchorDate(){return data.startDate||todayISO();}
+function dayNumberOf(iso){return daysBetween(anchorDate(),iso)+1;}
+function cycleDay(iso){
+  const periods=Object.keys(data.days).filter(k=>data.days[k].period&&k<=iso).sort();
+  if(!periods.length)return null;
+  return daysBetween(periods[periods.length-1],iso)+1;
+}
+
+function renderTracker(){
+  const today=todayISO();
+  document.getElementById('dcount').textContent=Object.keys(data.days).length;
+  const cd=cycleDay(viewDate);
+  document.getElementById('cyclePill').textContent=cd?('Cycle day '+cd):'Cycle day \u2014';
+  const dn=dayNumberOf(viewDate);
+  const isToday=(viewDate===today);
+  document.getElementById('logLabel').textContent=isToday?'Logging for':'Editing';
+  let line='';
+  if(isToday) line+='Today \u00b7 ';
+  if(dn>=1&&dn<=30) line+='Day '+dn+' \u00b7 ';
+  line+=fmtDate(viewDate);
+  document.getElementById('todayDate').textContent=line;
+
+  draft=Object.assign({},data.days[viewDate]||{});
+
+  // journey progress bar (based on today's day number, capped at 30)
+  const todayDn=dayNumberOf(today);
+  const shownDn=Math.min(Math.max(todayDn,1),30);
+  document.getElementById('jrDay').textContent=(todayDn>=30)?'Day 30 of 30 \u00b7 Complete':('Day '+shownDn+' of 30');
+  const leftEl=document.getElementById('jrLeft');
+  leftEl.textContent=(todayDn>=30)?'':((30-shownDn)+' days left');
+  document.getElementById('jrFill').style.width=Math.round((shownDn/30)*100)+'%';
+
+  const nudge=document.getElementById('nudge');
+  nudge.innerHTML=(isToday&&!data.days[today])?'<div class="nudge"><div class="dot"></div><p>You haven\'t logged today yet \u2014 takes under a minute.</p></div>':'';
+
+  const wrap=document.getElementById('metrics');wrap.innerHTML='';
+  METRICS.forEach(m=>{
+    const div=document.createElement('div');div.className='metric';
+    let btns='';
+    m.labels.forEach((lab,i)=>{const v=i+1;const sel=(draft[m.key]===v)?'sel':'';btns+='<button data-v="'+v+'" class="'+sel+'" onclick="pick(\''+m.key+'\','+v+',this)">'+lab+'</button>';});
+    div.innerHTML='<div class="m-top"><span class="m-name">'+m.name+'</span><span class="m-hint">'+m.hint+'</span></div><div class="scale">'+btns+'</div>';
+    wrap.appendChild(div);
+  });
+
+  document.getElementById('periodToggle').classList.toggle('on',!!draft.period);
+  document.getElementById('savemsg').classList.remove('show');
+  const logged=!!data.days[viewDate];
+  document.getElementById('saveArea').style.display=logged?'none':'block';
+  document.getElementById('loggedState').style.display=logged?'flex':'none';
+  document.getElementById('saveBtn').textContent=isToday?'Save this day':'Save this day';
+  renderGrid();
+}
+
+function pick(key,v,el){
+  draft[key]=v;
+  el.parentNode.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function togglePeriod(){
+  draft.period=!draft.period;
+  document.getElementById('periodToggle').classList.toggle('on',!!draft.period);
+}
+function saveDay(){
+  const hasData=METRICS.some(m=>draft[m.key])||draft.period;
+  if(!hasData){flashMsg("Tap at least one before saving.");return;}
+  if(!data.startDate){data.startDate=viewDate;}
+  data.days[viewDate]=Object.assign({},draft);
+  persist();
+  const saved=viewDate;
+  viewDate=todayISO();
+  const msg=SAVE_MSGS[Object.keys(data.days).length%SAVE_MSGS.length];
+  renderTracker();
+  flashMsg(msg);
+  setTimeout(()=>{
+    const idx=daysBetween(anchorDate(),saved);
+    const cells=document.querySelectorAll('#grid .cell');
+    if(cells[idx]){cells[idx].classList.add('pulse');cells[idx].scrollIntoView({behavior:'smooth',block:'nearest'});setTimeout(()=>cells[idx].classList.remove('pulse'),1500);}
+  },120);
+}
+function editDay(){
+  document.getElementById('saveArea').style.display='block';
+  document.getElementById('loggedState').style.display='none';
+  document.getElementById('saveBtn').textContent=(viewDate===todayISO())?'Update today':'Update this day';
+}
+function flashMsg(t){
+  const el=document.getElementById('savemsg');el.textContent=t;
+  el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
+}
+function renderGrid(){
+  const grid=document.getElementById('grid');grid.innerHTML='';
+  const today=todayISO();const anchor=anchorDate();
+  for(let i=0;i<30;i++){
+    const iso=isoPlus(anchor,i);
+    const cell=document.createElement('div');cell.className='cell';cell.textContent=i+1;
+    const isFuture=iso>today,isToday=iso===today,isLogged=!!data.days[iso];
+    if(isLogged){cell.classList.add('done');if(data.days[iso].period)cell.classList.add('period');}
+    else if(isToday){cell.classList.add('today');}
+    else if(isFuture){cell.classList.add('future');}
+    else{cell.classList.add('todo');}
+    if(!isFuture){cell.onclick=()=>{viewDate=iso;renderTracker();window.scrollTo({top:0,behavior:'smooth'});};}
+    grid.appendChild(cell);
+  }
+}
+function openSummary(){
+  const days=Object.keys(data.days);const n=days.length;
+  const todayDn=dayNumberOf(todayISO());
+  const journeyDone=todayDn>=30;
+  const earned=n>=20;
+
+  let hard=[];
+  days.forEach(k=>{const e=data.days[k];const vals=METRICS.map(m=>e[m.key]).filter(v=>v);if(vals.length){const avg=vals.reduce((a,b)=>a+b,0)/vals.length;if(avg<=1.8)hard.push(k);}});
+  document.getElementById('statDays').textContent=n;
+  document.getElementById('statHard').textContent=hard.length;
+
+  // identify top "hardest" symptom by frequency of lowest score
+  const lowCount={};METRICS.forEach(m=>lowCount[m.key]=0);
+  days.forEach(k=>METRICS.forEach(m=>{if(data.days[k][m.key]===1)lowCount[m.key]++;}));
+  const topLow=METRICS.slice().sort((a,b)=>lowCount[b.key]-lowCount[a.key])[0];
+  const topName=topLow?topLow.name.toLowerCase():null;
+  const hasTop=topLow&&lowCount[topLow.key]>0;
+
+  const head=document.getElementById('sumHead');
+  const ins=document.getElementById('insights');ins.innerHTML='';
+  const capHead=document.getElementById('capHead');
+  const capIntro=document.getElementById('capIntro');
+  const resetArea=document.getElementById('resetArea');
+  resetArea.style.display=journeyDone?'block':'none';
+  document.getElementById('resetBtn').style.display='block';
+  document.getElementById('resetConfirm').style.display='none';
+
+  if(journeyDone && earned){
+    // ---- FULL COMPLETION ----
+    head.textContent="Thirty days. You did something most women never do.";
+    let body='<div class="insight"><span class="lab">What you proved</span><p>You didn\u2019t just track \u2014 you stayed with it for a month. That alone puts you ahead of almost every woman navigating this.</p></div>';
+    if(hasTop){
+      body+='<div class="insight"><span class="lab">What you can now see</span><p>For the first time, you can see it in your own data: <strong>'+topName+'</strong> has been the thread pulling hardest at you. Not a guess. Not a feeling. A pattern you can point to. Most women spend years never seeing that clearly.</p></div>';
+    } else {
+      body+='<div class="insight"><span class="lab">What you can now see</span><p>For the first time, you can see your days laid side by side \u2014 not as scattered bad moments, but as a pattern you can actually point to. Most women spend years never seeing that clearly.</p></div>';
+    }
+    body+='<div class="insight"><span class="lab">The honest part</span><p>What you\u2019ve gathered is half the picture. You\u2019ve tracked your symptoms and your cycle \u2014 the <em>what</em> and the <em>when</em>. What you couldn\u2019t track is what your hormones were doing underneath it all \u2014 the <em>why</em>. That missing layer is the difference between seeing a pattern and knowing how to support it.</p></div>';
+    ins.innerHTML=body;
+    capHead.textContent="You\u2019ve done the hard part.";
+    capIntro.innerHTML='<p>InnerBloom is building the rest of the picture: a perimenopause clarity kit that tracks your symptoms, your cycle, <strong>and</strong> your hormone levels on the same days \u2014 so the pattern you\u2019ve just uncovered becomes something you can finally act on.</p><p><strong>You\u2019ve earned the next step. Be the first to know when it\u2019s ready.</strong></p>';
+  } else if(journeyDone && !earned){
+    // ---- PARTIAL COMPLETION ----
+    head.textContent="You reached day 30.";
+    let body='<div class="insight"><span class="lab">Worth saying</span><p>You logged '+n+' of your 30 days. Even partial tracking shows more than most women ever let themselves see \u2014 and that matters.</p></div>';
+    if(hasTop){
+      body+='<div class="insight"><span class="lab">What showed up</span><p>Even in what you logged, <strong>'+topName+'</strong> came through as your hardest column most often. Imagine how much clearer that thread would be with a full month behind it.</p></div>';
+    }
+    body+='<div class="insight"><span class="lab">If you want the full picture</span><p>The gaps mean your pattern is fainter than it could be. You can start a fresh 30 days below and give yourself the complete view \u2014 there\u2019s no penalty for starting again.</p></div>';
+    ins.innerHTML=body;
+    capHead.textContent="And when you\u2019re ready to understand it \u2014 not just see it";
+    capIntro.innerHTML='<p>InnerBloom is building a perimenopause clarity kit that tracks your symptoms, your cycle, <strong>and</strong> your hormone levels on the same days \u2014 the layer this tracker can\u2019t reach.</p><p>Leave your email and we\u2019ll tell you the moment it\u2019s ready.</p>';
+  } else if(n<5){
+    // ---- EARLY ----
+    head.textContent="Your pattern is still forming.";
+    ins.innerHTML='<div class="insight"><span class="lab">Keep going</span><p>You\u2019ve logged '+n+' '+(n===1?'day':'days')+'. Patterns usually start becoming visible around day 7, and clearer by day 30. There\u2019s nothing to read into yet \u2014 just keep marking your days.</p></div>';
+    capHead.textContent="Want this pattern explained \u2014 not just visible?";
+    capIntro.innerHTML='<p>This tracker shows you <em>that</em> a pattern exists. It can\u2019t tell you <em>why</em>.</p><p>InnerBloom is building a perimenopause clarity kit that tracks your symptoms <strong>and</strong> your hormone levels on the same days \u2014 so the pattern isn\u2019t just visible, it\u2019s something you can understand.</p><p>Leave your email and we\u2019ll tell you the moment it\u2019s ready.</p>';
+  } else {
+    // ---- IN PROGRESS ----
+    head.textContent="Here\u2019s what\u2019s starting to show.";
+    let body='';
+    if(hasTop){body+='<div class="insight"><span class="lab">Most frequent</span><p><strong>'+topName+'</strong> showed up as your hardest column most often. That\u2019s not a verdict \u2014 it\u2019s the thread worth watching first.</p></div>';}
+    if(hard.length>=2){body+='<div class="insight"><span class="lab">On your harder days</span><p>Several columns tended to dip together rather than alone. When symptoms cluster on the same days, that\u2019s often a sign they share something underneath \u2014 which is exactly what\u2019s worth understanding.</p></div>';}
+    const periodLogged=days.some(k=>data.days[k].period);
+    if(periodLogged&&hard.length>=2){
+      const cds=hard.map(k=>cycleDay(k)).filter(v=>v);
+      if(cds.length>=2){const avg=Math.round(cds.reduce((a,b)=>a+b,0)/cds.length);body+='<div class="insight"><span class="lab">A pattern within the pattern</span><p>Your harder days clustered around <strong>cycle day '+avg+'</strong> on average. Symptoms that repeat at a consistent cycle point are particularly likely to have a hormonal component worth exploring.</p></div>';}
+    }else if(!periodLogged){body+='<div class="insight"><span class="lab">One thing to add</span><p>You haven\u2019t marked any period days yet. Adding those unlocks the most useful view \u2014 whether your harder days cluster at a specific point in your cycle.</p></div>';}
+    ins.innerHTML=body;
+    capHead.textContent="Want this pattern explained \u2014 not just visible?";
+    capIntro.innerHTML='<p>This tracker shows you <em>that</em> a pattern exists. It can\u2019t tell you <em>why</em>.</p><p>InnerBloom is building a perimenopause clarity kit that tracks your symptoms <strong>and</strong> your hormone levels on the same days \u2014 so the pattern isn\u2019t just visible, it\u2019s something you can understand.</p><p>Leave your email and we\u2019ll tell you the moment it\u2019s ready.</p>';
+  }
+  show('s-summary');
+}
+
+function askReset(){
+  document.getElementById('resetBtn').style.display='none';
+  document.getElementById('resetConfirm').style.display='block';
+}
+function cancelReset(){
+  document.getElementById('resetConfirm').style.display='none';
+  document.getElementById('resetBtn').style.display='block';
+}
+function doReset(){
+  data={startDate:null,days:{}};
+  persist();
+  viewDate=todayISO();
+  show('s-track');
+  renderTracker();
+}
+async function capture(){
+  const email=document.getElementById('email').value.trim();
+  const btn=document.getElementById('submitBtn');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){document.getElementById('email').style.borderColor='#A9404A';document.getElementById('email').focus();return;}
+  btn.textContent='One moment\u2026';btn.style.opacity='.7';
+  try{
+    await fetch('https://a.klaviyo.com/client/subscriptions/?company_id='+KLAVIYO_COMPANY_ID,{
+      method:'POST',headers:{'Content-Type':'application/json','revision':'2024-10-15'},
+      body:JSON.stringify({data:{type:'subscription',attributes:{profile:{data:{type:'profile',attributes:{email:email}}}},relationships:{list:{data:{type:'list',id:KLAVIYO_LIST_ID}}}}})
+    });
+  }catch(e){}
+  document.getElementById('capture').style.display='none';
+  document.getElementById('okcap').style.display='block';
+}
+load();
+if(data.startDate&&Object.keys(data.days).length>0){enterTracker();}
+</script>
+</body>
+</html>
