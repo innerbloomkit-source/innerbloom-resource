@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6B2D45">
+<title>The Things Nobody Connected — InnerBloom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#6B2D45;--plum-deep:#561F35;--cream:#FAF8F5;--cream-dim:#F1ECE4;
+    --gold:#A97340;--gold-soft:#C79466;--ink:#3A2630;--line:rgba(107,45,69,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  .wrap{max-width:540px;margin:0 auto;}
+  h1{font-family:'Cormorant Garamond';font-weight:500;letter-spacing:-.01em;line-height:1.08;}
+  h2{font-family:'Cormorant Garamond';font-weight:500;font-size:30px;line-height:1.16;color:var(--plum);letter-spacing:-.01em;}
+  h3{font-family:'DM Sans';font-weight:600;font-size:14px;letter-spacing:.02em;}
+  em{font-style:italic;}strong{font-weight:600;}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ===== HERO ===== */
+  .hero{padding:62px 26px 50px;text-align:center;}
+  .eyebrow{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:22px;}
+  .hero h1{font-size:40px;color:var(--plum);margin-bottom:16px;}
+  .hero .sub{font-family:'Cormorant Garamond';font-style:italic;font-size:23px;color:var(--gold);line-height:1.3;}
+  .hero .lead{font-size:16px;color:var(--ink);max-width:430px;margin:24px auto 0;}
+
+  /* ===== SCATTERED SYMPTOMS ===== */
+  .scatter-sec{padding:30px 26px 50px;}
+  .scatter-intro{text-align:center;font-size:15px;color:var(--ink);max-width:420px;margin:0 auto 30px;}
+  .schip{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;opacity:0;transform:translateY(14px) rotate(var(--rot,0deg));transition:opacity .6s ease,transform .6s cubic-bezier(.22,1,.36,1);}
+  .schip.in{opacity:1;transform:translateY(0) rotate(var(--rot,0deg));}
+  .schip .sym{font-size:16.5px;font-weight:600;color:var(--plum);}
+  .schip .blame{font-size:13.5px;color:var(--gold-soft);margin-top:3px;}
+  .schip .blame em{color:var(--gold);font-style:normal;font-weight:600;}
+
+  /* ===== CONNECTION ANIMATION ===== */
+  .connect-sec{padding:54px 20px 60px;background:linear-gradient(180deg,var(--cream) 0%,var(--cream-dim) 100%);text-align:center;}
+  .connect-sec .sec-label{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:14px;}
+  .connect-sec h2{margin-bottom:30px;padding:0 6px;}
+  .constage{position:relative;width:100%;max-width:360px;height:360px;margin:0 auto;}
+  .constage svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+  .conline{stroke:var(--gold);stroke-width:1.5;stroke-dasharray:200;stroke-dashoffset:200;opacity:.5;}
+  .constage.go .conline{animation:drawline 1s ease forwards;}
+  @keyframes drawline{to{stroke-dashoffset:0;}}
+  .node{position:absolute;transform:translate(-50%,-50%);background:var(--cream);border:1px solid var(--line);border-radius:11px;padding:9px 12px;font-size:12.5px;font-weight:600;color:var(--plum);white-space:nowrap;opacity:0;transition:opacity .5s ease,transform .7s cubic-bezier(.22,1,.36,1);box-shadow:0 3px 12px rgba(107,45,69,.07);}
+  .node.in{opacity:1;}
+  .center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.4);width:120px;height:120px;border-radius:50%;background:var(--plum);color:var(--cream);display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Cormorant Garamond';font-size:19px;font-weight:500;line-height:1.2;opacity:0;transition:opacity .7s ease,transform .9s cubic-bezier(.22,1.3,.36,1);padding:14px;box-shadow:0 10px 34px rgba(107,45,69,.3);z-index:5;}
+  .center.in{opacity:1;transform:translate(-50%,-50%) scale(1);}
+  .connect-caption{font-family:'Cormorant Garamond';font-style:italic;font-size:22px;color:var(--plum);margin-top:34px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.35;opacity:0;transition:opacity .8s ease;}
+  .connect-caption.in{opacity:1;}
+
+  /* ===== SECTIONS ===== */
+  .sec{padding:58px 26px;}
+  .sec-label{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:14px;}
+  .rule{width:34px;height:1px;background:var(--line);margin:16px 0 24px;}
+  .body{font-size:16px;color:var(--ink);}.body p{margin-top:15px;}
+  .accent{color:var(--plum);font-style:italic;font-family:'Cormorant Garamond';font-size:21px;line-height:1.4;margin-top:22px;}
+
+  /* expandable symptom cards */
+  .ecard{border:1px solid var(--line);border-radius:15px;margin-bottom:12px;overflow:hidden;background:var(--cream);}
+  .ecard .ehead{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+  .ecard .ehead .etitle{font-size:16px;font-weight:600;color:var(--plum);}
+  .ecard .ehead .plus{width:22px;height:22px;position:relative;flex-shrink:0;margin-left:12px;}
+  .ecard .ehead .plus:before,.ecard .ehead .plus:after{content:'';position:absolute;background:var(--gold);border-radius:2px;transition:transform .35s cubic-bezier(.22,1,.36,1);}
+  .ecard .ehead .plus:before{width:14px;height:2px;top:10px;left:4px;}
+  .ecard .ehead .plus:after{width:2px;height:14px;top:4px;left:10px;}
+  .ecard.open .plus:after{transform:rotate(90deg);opacity:0;}
+  .ecard .ebody{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.22,1,.36,1);}
+  .ecard .ebody .inner{padding:0 20px 20px;}
+  .ecard .ebody p{font-size:14.5px;color:var(--ink);line-height:1.55;}
+  .ecard .ebody .reframe{margin-top:12px;font-family:'Cormorant Garamond';font-style:italic;font-size:18px;color:var(--plum);line-height:1.35;}
+  .ecard.open .ebody{max-height:320px;}
+
+  /* shift cards */
+  .shift{display:flex;gap:15px;margin-top:24px;}
+  .shift .ic{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;}
+  .shift .ic svg{width:17px;height:17px;}
+  .shift .stxt h4{font-size:15px;font-weight:600;color:var(--plum);margin-bottom:3px;}
+  .shift .stxt p{font-size:14.5px;color:var(--ink);line-height:1.5;}
+
+  .puzzle-note{background:var(--cream-dim);border-left:2px solid var(--gold);border-radius:0 12px 12px 0;padding:18px 20px;margin-top:28px;font-family:'Cormorant Garamond';font-style:italic;font-size:19px;color:var(--plum);line-height:1.4;}
+
+  /* conversion */
+  .conv{background:var(--cream-dim);border-radius:18px;padding:28px 24px;margin-top:34px;}
+  .conv .tracker-bridge{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:24px;}
+  .conv h3{color:var(--plum);font-size:16px;margin-bottom:4px;}
+  .conv p{font-size:15px;margin-top:10px;}
+  .btn{appearance:none;border:none;cursor:pointer;font-family:'DM Sans';font-weight:500;font-size:16px;border-radius:14px;padding:17px 22px;width:100%;text-align:center;transition:transform .15s ease,opacity .25s ease;text-decoration:none;display:block;}
+  .btn-primary{background:var(--plum);color:var(--cream);box-shadow:0 6px 22px rgba(107,45,69,.22);margin-top:18px;}
+  .btn-primary:active{transform:scale(.98);}
+  .btn-outline{background:none;color:var(--plum);border:1.5px solid var(--plum);margin-top:16px;}
+  .field{margin-top:18px;}
+  .field input{width:100%;font-family:'DM Sans';font-size:16px;padding:17px 18px;border:1px solid var(--line);border-radius:14px;background:var(--cream);color:var(--ink);transition:border .2s ease;}
+  .field input:focus{outline:none;border-color:var(--plum);}
+  .micro{font-size:12.5px;color:var(--gold-soft);margin-top:14px;text-align:center;}
+  .ok-cap{display:none;text-align:center;padding:8px 0;animation:fadein .6s ease both;}
+  @keyframes fadein{from{opacity:0;}to{opacity:1;}}
+  .insta{font-size:13px;letter-spacing:.12em;color:var(--gold);font-weight:600;margin-bottom:14px;}
+
+  .closing{text-align:center;padding:54px 30px 30px;}
+  .closing .line{font-family:'Cormorant Garamond';font-style:italic;font-size:25px;color:var(--plum);line-height:1.35;}
+  .foot{text-align:center;padding:10px 26px 50px;}
+  .foot a{color:var(--plum);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:1px;}
+  .disclaimer{font-size:11.5px;line-height:1.5;color:var(--gold-soft);margin-top:24px;text-align:center;}
+  @media(max-width:360px){.hero h1{font-size:35px;}h2{font-size:27px;}.constage{height:330px;}.center{width:108px;height:108px;font-size:17px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">The InnerBloom Guide</div>
+    <h1>These things are not random.</h1>
+    <div class="sub">They are the same conversation.</div>
+    <div class="lead">You have been treating them as separate problems. Different causes. Different fixes. Different things to Google at midnight. What if they were never separate at all?</div>
+  </section>
+
+  <!-- SCATTERED -->
+  <section class="scatter-sec">
+    <div class="scatter-intro">Six things you have probably been carrying &mdash; each one filed under a different explanation.</div>
+    <div class="schip" style="--rot:-1deg"><div class="sym">The 3am wake-ups</div><div class="blame">that you have been blaming on <em>stress</em></div></div>
+    <div class="schip" style="--rot:.8deg"><div class="sym">The brain fog</div><div class="blame">that you have been calling <em>burnout</em></div></div>
+    <div class="schip" style="--rot:-.6deg"><div class="sym">The rage</div><div class="blame">that you have been <em>apologising for</em></div></div>
+    <div class="schip" style="--rot:1deg"><div class="sym">The weight</div><div class="blame">that you have been blaming on <em>your diet</em></div></div>
+    <div class="schip" style="--rot:-.9deg"><div class="sym">The anxiety</div><div class="blame">that arrives <em>before you can explain it</em></div></div>
+    <div class="schip" style="--rot:.7deg"><div class="sym">The exhaustion</div><div class="blame">that <em>sleep does not touch</em></div></div>
+  </section>
+
+  <!-- CONNECTION ANIMATION -->
+  <section class="connect-sec">
+    <div class="sec-label">Why This Happens</div>
+    <h2>Six symptoms. One pattern.</h2>
+    <div class="constage" id="constage">
+      <svg viewBox="0 0 360 360" preserveAspectRatio="xMidYMid meet">
+        <line class="conline" x1="180" y1="180" x2="180" y2="46"/>
+        <line class="conline" x1="180" y1="180" x2="296" y2="113"/>
+        <line class="conline" x1="180" y1="180" x2="296" y2="247"/>
+        <line class="conline" x1="180" y1="180" x2="180" y2="314"/>
+        <line class="conline" x1="180" y1="180" x2="64" y2="247"/>
+        <line class="conline" x1="180" y1="180" x2="64" y2="113"/>
+      </svg>
+      <div class="node" style="left:50%;top:13%">Sleep</div>
+      <div class="node" style="left:82%;top:31%">Brain fog</div>
+      <div class="node" style="left:82%;top:69%">Mood</div>
+      <div class="node" style="left:50%;top:87%">Weight</div>
+      <div class="node" style="left:18%;top:69%">Anxiety</div>
+      <div class="node" style="left:18%;top:31%">Exhaustion</div>
+      <div class="center" id="conCenter">One hormonal shift</div>
+    </div>
+    <div class="connect-caption" id="conCaption">Your body is not falling apart in six different directions. It may be speaking one language you were never taught to read.</div>
+  </section>
+
+  <!-- SIX SYMPTOMS DETAIL -->
+  <section class="sec reveal">
+    <div class="sec-label">What The Research Suggests</div>
+    <h2>What they have in common.</h2>
+    <div class="rule"></div>
+    <div class="body"><p>Tap each one to see the thread underneath it.</p></div>
+    <div style="margin-top:24px">
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">Brain fog</span><span class="plus"></span></div><div class="ebody"><div class="inner"><p>Estrogen plays a role in how the brain processes and retrieves information. When estrogen fluctuates, word-finding trouble, memory lapses, and difficulty concentrating can follow.</p><div class="reframe">For many women: not neurological decline. A hormonal pattern.</div></div></div></div>
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">Sleep disruption</span><span class="plus"></span></div><div class="ebody"><div class="inner"><p>Progesterone influences GABA receptors &mdash; the brain&rsquo;s calming system. When it starts fluctuating, sleep architecture can become less stable.</p><div class="reframe">The 3am wake-up may not be insomnia. It may be a hormonal signal.</div></div></div></div>
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">Mood shifts and rage</span><span class="plus"></span></div><div class="ebody"><div class="inner"><p>Both estrogen and progesterone influence mood regulation. When they fluctuate at the same time, emotional responses can feel disproportionate and foreign &mdash; like reactions that are not yours.</p><div class="reframe">Not a personality change. A hormonal shift.</div></div></div></div>
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">Anxiety and low-level dread</span><span class="plus"></span></div><div class="ebody"><div class="inner"><p>Progesterone has a calming effect on the nervous system. When it fluctuates, that calming baseline becomes inconsistent.</p><div class="reframe">The sense of impending doom for no reason may be directly connected to this shift.</div></div></div></div>
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">Weight redistribution</span><span class="plus"></span></div><div class="ebody"><div class="inner"><p>As estrogen declines, fat storage patterns can shift toward the abdomen. Insulin sensitivity may also change during this transition.</p><div class="reframe">Not a willpower failure. A metabolic response to hormonal change.</div></div></div></div>
+      <div class="ecard"><div class="ehead" onclick="toggleE(this)"><span class="etitle">Exhaustion that sleep does not fix</span><span class="plus"></span></div><div class="ebody"><div class="inner"><p>When sleep architecture is disrupted and cortisol patterns shift, the restorative function of sleep can decline regardless of how many hours you slept.</p><div class="reframe">Not about sleep quantity. About the systems that govern sleep quality.</div></div></div></div>
+    </div>
+    <p class="cite" style="font-size:11.5px;color:var(--gold-soft);margin-top:20px;line-height:1.5">Based on published research and presented as orientation, not diagnosis. If you are experiencing these symptoms significantly, they are worth discussing with a medical professional who understands perimenopausal hormone fluctuation.</p>
+  </section>
+
+  <!-- WHAT THIS MEANS -->
+  <section class="sec reveal" style="background:var(--cream-dim)">
+    <div class="sec-label">What This Means</div>
+    <h2>You have not been failing at six problems.</h2>
+    <div class="rule"></div>
+    <div class="body">
+      <p>When symptoms feel disconnected, the instinct is to fix each one alone. Something for sleep. Something for mood. Something for weight. Some of it helps. None of it resolves the whole picture.</p>
+      <p>Because for many women, these may share an underlying hormonal component rather than being six separate problems. <strong>This is not a criticism of what you tried.</strong> Everything you tried made sense given what you were told. The gap was never in your effort &mdash; it was in the information.</p>
+    </div>
+
+    <h3 style="color:var(--plum);font-size:15px;margin-top:30px">What changes when you see the pattern</h3>
+    <div class="shift">
+      <div class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10.5L8 14.5L16 5.5" stroke="#A97340" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="stxt"><h4>The self-blame reduces</h4><p>You were not failing at sleep, at stress, at weight. You were navigating a whole-body shift without a map.</p></div>
+    </div>
+    <div class="shift">
+      <div class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10.5L8 14.5L16 5.5" stroke="#A97340" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="stxt"><h4>The symptoms become less frightening</h4><p>Brain fog is not dementia. Rage is not a personality flaw. They are data points in the same underlying shift.</p></div>
+    </div>
+    <div class="shift">
+      <div class="ic"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10.5L8 14.5L16 5.5" stroke="#A97340" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="stxt"><h4>The question changes</h4><p>Instead of chasing each symptom, the question becomes: <em>what does this whole pattern need?</em> That leads to completely different answers.</p></div>
+    </div>
+
+    <div class="puzzle-note">And if supplements you tried did not resolve the full picture &mdash; it may be because they addressed individual symptoms, not the shift underneath them. Like solving pieces of a puzzle without ever seeing the picture on the box.</div>
+  </section>
+
+  <!-- CONVERSION -->
+  <section class="sec reveal">
+    <div class="sec-label">What Comes Next</div>
+    <h2>Start seeing the connections.</h2>
+    <div class="rule"></div>
+    <div class="body"><p>You do not need to do anything dramatic. Just start noticing &mdash; in your own experience, in your own time.</p></div>
+    <div class="shift" style="margin-top:26px">
+      <div class="ic"><span style="font-family:'Cormorant Garamond';color:var(--gold);font-weight:600;font-size:16px">1</span></div>
+      <div class="stxt"><h4>Notice which symptoms cluster together</h4><p>Do the hard sleep nights and the hard mood days arrive together? Start noticing correlations rather than treating each in isolation.</p></div>
+    </div>
+    <div class="shift">
+      <div class="ic"><span style="font-family:'Cormorant Garamond';color:var(--gold);font-weight:600;font-size:16px">2</span></div>
+      <div class="stxt"><h4>Notice when in your cycle they intensify</h4><p>Symptoms that cluster premenstrually, or in cycles without ovulation, are particularly likely to have a hormonal component.</p></div>
+    </div>
+    <div class="shift">
+      <div class="ic"><span style="font-family:'Cormorant Garamond';color:var(--gold);font-weight:600;font-size:16px">3</span></div>
+      <div class="stxt"><h4>Notice what individual fixes are missing</h4><p>If something helped one symptom but left the others untouched &mdash; that is information. It addressed one expression of the pattern, not the pattern itself.</p></div>
+    </div>
+
+    <div class="conv">
+      <div class="tracker-bridge">
+        <h3>Built for exactly this</h3>
+        <p>The free InnerBloom Pattern Tracker logs sleep, mood, body, mind, energy and cycle together &mdash; so the connections between them become visible over 30 days.</p>
+        <a class="btn btn-outline" href="https://innerbloomkit-source.github.io/innerbloom-resource/pattern-tracker.html">Open the free Pattern Tracker</a>
+      </div>
+      <div id="capture">
+        <h2 style="font-size:25px">Seeing the pattern is the start. Understanding it is the point.</h2>
+        <p>InnerBloom is building a perimenopause clarity kit that connects your symptoms to what your hormones are actually doing &mdash; then shows you how to support your body based on your own pattern, not six separate fixes.</p>
+        <p>Because the goal was never to manage six problems forever. It is to feel like yourself again &mdash; clearer, steadier, and no longer afraid that something is wrong with you.</p>
+        <p>We are building what we wish existed when all of this started feeling like too many things at once.</p>
+        <div class="field"><input type="email" id="email" placeholder="Your email" autocomplete="email" inputmode="email"></div>
+        <button class="btn btn-primary" id="submitBtn" onclick="capture()">Tell me when it is ready</button>
+        <div class="micro">No spam. No noise. Just the update when it matters.</div>
+      </div>
+      <div class="ok-cap" id="okcap">
+        <div class="insta">@innerbloom_kit</div>
+        <h2 style="font-size:24px">You are on the list.</h2>
+        <p style="font-size:15px;margin-top:10px">You will hear from us when there is something real to share &mdash; the thing that turns the pattern you can now see into something you can finally act on.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="closing reveal">
+    <div class="line">You are not falling apart.<br>You may just be seeing the parts<br>without the thread that connects them.</div>
+  </div>
+
+  <div class="foot">
+    <a href="https://innerbloomkit.com" target="_blank" rel="noopener">innerbloomkit.com</a>
+    <div class="disclaimer">This guide is for informational purposes only and does not constitute medical advice. It is based on published research and intended to support understanding, not to diagnose or treat any condition. If you are experiencing these symptoms significantly, please speak with a qualified medical professional who understands perimenopausal hormone fluctuation.</div>
+  </div>
+</div>
+
+<script>
+const KLAVIYO_COMPANY_ID="XmzfxG";
+const KLAVIYO_LIST_ID="WSusTW"; // Things Nobody Connected (CONNECTED)
+
+/* scroll reveal */
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});},{threshold:.16});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* scattered chips stagger in */
+const scatterObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const chips=document.querySelectorAll('.schip');
+      chips.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),i*130));
+      scatterObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+const firstChip=document.querySelector('.scatter-sec'); if(firstChip)scatterObs.observe(firstChip);
+
+/* connection animation: nodes appear scattered, then lines draw, then center pulls together */
+let connectRun=false;
+const connectObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting && !connectRun){ runConnect(); connectRun=true; connectObs.unobserve(e.target);} });
+},{threshold:.45});
+const stage=document.getElementById('constage'); if(stage)connectObs.observe(stage);
+
+function runConnect(){
+  const nodes=document.querySelectorAll('.node');
+  // step 1: nodes fade in one by one
+  nodes.forEach((n,i)=>setTimeout(()=>n.classList.add('in'),i*150));
+  // step 2: lines draw inward
+  setTimeout(()=>{ document.getElementById('constage').classList.add('go'); }, nodes.length*150+250);
+  // step 3: center appears
+  setTimeout(()=>{ document.getElementById('conCenter').classList.add('in'); }, nodes.length*150+900);
+  // step 4: caption
+  setTimeout(()=>{ document.getElementById('conCaption').classList.add('in'); }, nodes.length*150+1500);
+}
+
+/* expandable */
+function toggleE(head){ head.parentNode.classList.toggle('open'); }
+
+/* klaviyo */
+async function capture(){
+  const email=document.getElementById('email').value.trim();
+  const btn=document.getElementById('submitBtn');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){document.getElementById('email').style.borderColor='#A9404A';document.getElementById('email').focus();return;}
+  btn.textContent='One moment\u2026';btn.style.opacity='.7';
+  try{
+    await fetch('https://a.klaviyo.com/client/subscriptions/?company_id='+KLAVIYO_COMPANY_ID,{
+      method:'POST',headers:{'Content-Type':'application/json','revision':'2024-10-15'},
+      body:JSON.stringify({data:{type:'subscription',attributes:{profile:{data:{type:'profile',attributes:{email:email}}}},relationships:{list:{data:{type:'list',id:KLAVIYO_LIST_ID}}}}})
+    });
+  }catch(e){}
+  document.getElementById('capture').style.display='none';
+  document.getElementById('okcap').style.display='block';
+}
+</script>
+</body>
+</html>
