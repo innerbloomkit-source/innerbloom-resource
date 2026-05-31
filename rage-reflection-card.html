@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6B2D45">
+<title>The Rage Reflection Card — InnerBloom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#6B2D45;--plum-deep:#561F35;--cream:#FAF8F5;--cream-dim:#F1ECE4;
+    --gold:#A97340;--gold-soft:#C79466;--ink:#3A2630;--line:rgba(107,45,69,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  .wrap{max-width:540px;margin:0 auto;}
+  h1{font-family:'Cormorant Garamond';font-weight:500;letter-spacing:-.01em;line-height:1.12;color:var(--plum);}
+  h2{font-family:'Cormorant Garamond';font-weight:500;font-size:29px;line-height:1.2;color:var(--plum);letter-spacing:-.01em;}
+  em{font-style:italic;}strong{font-weight:600;color:var(--plum);}
+  .eyebrow{font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600;}
+
+  .screen{display:none;}
+  .screen.active{display:block;animation:fade .7s ease both;}
+  @keyframes fade{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+  /* INTRO */
+  .intro{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:54px 28px;}
+  .intro .eyebrow{margin-bottom:22px;}
+  .intro h1{font-size:35px;margin-bottom:22px;}
+  .intro .lead{font-size:16px;color:var(--ink);}
+  .intro .lead p{margin-top:15px;}
+  .intro .reassure{margin-top:22px;font-size:14px;color:var(--gold);font-style:italic;font-family:'Cormorant Garamond';font-size:18px;line-height:1.4;}
+  .btn{appearance:none;border:none;cursor:pointer;font-family:'DM Sans';font-weight:500;font-size:16px;border-radius:14px;padding:18px 22px;width:100%;text-align:center;transition:transform .15s ease,opacity .3s ease,box-shadow .25s ease;text-decoration:none;display:block;}
+  .btn-primary{background:var(--plum);color:var(--cream);box-shadow:0 6px 22px rgba(107,45,69,.22);margin-top:30px;}
+  .btn-primary:active{transform:scale(.985);}
+  .btn-outline{background:none;color:var(--plum);border:1.5px solid var(--plum);}
+
+  /* REFLECTION */
+  .reflect{padding:48px 28px 60px;}
+  .reflect-head{text-align:center;margin-bottom:14px;}
+  .reflect-head .eyebrow{margin-bottom:12px;}
+  .reflect-head p{font-size:14.5px;color:var(--gold);font-style:italic;font-family:'Cormorant Garamond';font-size:18px;line-height:1.4;}
+
+  .promptblock{padding:30px 0;border-bottom:1px solid var(--line);transition:opacity 1.15s ease,filter 1.15s ease,transform 1.15s ease;}
+  .promptblock:last-of-type{border-bottom:none;}
+  .promptblock.dissolve{opacity:0;filter:blur(9px);transform:translateY(-12px);pointer-events:none;}
+  .pnum{font-family:'Cormorant Garamond';font-size:17px;color:var(--gold-soft);font-weight:600;margin-bottom:10px;letter-spacing:.04em;}
+  .ptext{font-family:'Cormorant Garamond';font-weight:500;font-size:24px;line-height:1.3;color:var(--plum);}
+  .pstat{font-size:13px;color:var(--ink);opacity:.78;line-height:1.55;margin-top:12px;padding-left:13px;border-left:2px solid var(--gold-soft);}
+  .pfield{margin-top:16px;}
+  .reflect-head,.letgo-wrap{transition:opacity .9s ease;}
+  .pfield textarea{width:100%;min-height:104px;font-family:'DM Sans';font-size:15.5px;line-height:1.6;color:var(--ink);padding:16px 17px;border:1px solid var(--line);border-radius:13px;background:var(--cream);resize:vertical;transition:border .25s ease,box-shadow .25s ease;}
+  .pfield textarea::placeholder{color:var(--gold-soft);opacity:.7;}
+  .pfield textarea:focus{outline:none;border-color:var(--plum);box-shadow:0 4px 18px rgba(107,45,69,.08);}
+
+  .letgo-wrap{margin-top:38px;}
+  .letgo-sub{text-align:center;font-size:13px;color:var(--gold-soft);margin-bottom:16px;line-height:1.5;}
+
+  /* FINALE */
+  .finale{display:none;padding:30px 28px 60px;scroll-margin-top:30px;}
+  .release-note{text-align:center;font-family:'Cormorant Garamond';font-style:italic;font-size:22px;color:var(--plum);line-height:1.4;margin-bottom:8px;opacity:0;transition:opacity 1s ease;}
+  .release-note.show{opacity:1;}
+  .finale-inner{opacity:0;}
+  .finale-inner.land{animation:land 1s cubic-bezier(.22,1.18,.36,1) forwards;}
+  @keyframes land{0%{transform:translateY(48px);opacity:0;}60%{transform:translateY(-13px);opacity:1;}100%{transform:translateY(0);opacity:1;}}
+
+  .reframe-card{background:var(--cream-dim);border-radius:18px;padding:30px 26px;margin-top:30px;text-align:center;}
+  .reframe-card .rf{font-family:'Cormorant Garamond';font-size:24px;line-height:1.32;color:var(--plum);}
+  .reframe-card .rf em{font-style:italic;}
+
+  .conv{background:var(--cream-dim);border-radius:18px;padding:28px 24px;margin-top:24px;}
+  .conv .tracker-bridge{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:24px;}
+  .conv h3{color:var(--plum);font-size:16px;margin-bottom:4px;}
+  .conv p{font-size:15px;margin-top:10px;}
+  .conv .open-line{font-size:16px;color:var(--ink);}
+  .field{margin-top:18px;}
+  .field input{width:100%;font-family:'DM Sans';font-size:16px;padding:17px 18px;border:1px solid var(--line);border-radius:14px;background:var(--cream);color:var(--ink);transition:border .2s ease;}
+  .field input:focus{outline:none;border-color:var(--plum);}
+  .micro{font-size:12.5px;color:var(--gold-soft);margin-top:14px;text-align:center;}
+  .ok-cap{display:none;text-align:center;padding:8px 0;animation:fade .6s ease both;}
+  .insta{font-size:13px;letter-spacing:.12em;color:var(--gold);font-weight:600;margin-bottom:14px;}
+
+  .closing{text-align:center;padding:46px 30px 26px;}
+  .closing .line{font-family:'Cormorant Garamond';font-style:italic;font-size:23px;color:var(--plum);line-height:1.38;}
+  .foot{text-align:center;padding:8px 28px 50px;}
+  .foot a{color:var(--plum);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:1px;}
+  .disclaimer{font-size:11.5px;line-height:1.5;color:var(--gold-soft);margin-top:22px;text-align:center;}
+  @media(max-width:360px){.intro h1{font-size:31px;}.ptext{font-size:22px;}.reframe-card .rf{font-size:22px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <section class="screen active" id="s-intro">
+    <div class="intro">
+      <div class="eyebrow">The Rage Reflection Card</div>
+      <h1>You have been apologising for a feeling you never got to understand first.</h1>
+      <div class="lead">
+        <p>The anger that arrives from nowhere. The hour after, when the shame sets in. The sense that you are not who you used to be.</p>
+        <p>This is not a quiz. There are no right answers. <strong>Nothing you write here is saved or sent anywhere</strong> &mdash; only you will ever see it.</p>
+        <p>Five prompts. Write as much or as little as you want. When you are ready, you let it go.</p>
+      </div>
+      <div class="reassure">Say the things you have not been able to say out loud.</div>
+      <button class="btn btn-primary" onclick="begin()">Begin</button>
+    </div>
+  </section>
+
+  <!-- REFLECTION -->
+  <section class="screen" id="s-reflect">
+    <div class="reflect" id="reflectArea">
+      <div class="reflect-head">
+        <div class="eyebrow">Just For You</div>
+        <p>Nothing here is saved. Write freely.</p>
+      </div>
+
+      <div class="promptblock" id="p1">
+        <div class="pnum">01</div>
+        <div class="ptext">Think about the last time it arrived. What was happening right before it &mdash; or did it come from nowhere?</div>
+        <div class="pstat">Irritability and rage are among the most commonly reported experiences in perimenopause &mdash; some research suggests up to 70% of women describe them. They are linked to estrogen and progesterone fluctuation affecting how the brain regulates emotion. Not personality. Not weakness. A hormone pattern.</div>
+        <div class="pfield"><textarea placeholder="Start wherever you want."></textarea></div>
+      </div>
+
+      <div class="promptblock" id="p2">
+        <div class="pnum">02</div>
+        <div class="ptext">What does the hour after look like? What do you do with how that felt?</div>
+        <div class="pstat">The shame that follows is almost universal. When a reaction arrives before its cause makes any sense, the mind fills the gap with self-blame. So many women describe apologising for a feeling they did not choose and could not explain.</div>
+        <div class="pfield"><textarea placeholder="However it actually goes."></textarea></div>
+      </div>
+
+      <div class="promptblock" id="p3">
+        <div class="pnum">03</div>
+        <div class="ptext">Think about who you were a few years ago. What would she make of who you feel like right now?</div>
+        <div class="pstat">Feeling like a stranger in your own life is one of the most reported experiences of this stage. Hormonal shifts can move your emotional baseline in ways that feel foreign &mdash; which is exactly why so many women say "this is not me."</div>
+        <div class="pfield"><textarea placeholder="Be honest. No one is reading."></textarea></div>
+      </div>
+
+      <div class="promptblock" id="p4">
+        <div class="pnum">04</div>
+        <div class="ptext">If you could say one thing to the people around you &mdash; your partner, your kids, your colleagues &mdash; what would it be? The thing you have not found the words for yet.</div>
+        <div class="pstat">Strain on the people closest to you is one of the most common things women carry &mdash; not because something is wrong with you, but because they do not understand what is happening either. Putting it into words is often the first relief.</div>
+        <div class="pfield"><textarea placeholder="The thing you have been holding."></textarea></div>
+      </div>
+
+      <div class="promptblock" id="p5">
+        <div class="pnum">05</div>
+        <div class="ptext">What would it mean to you to finally understand why this is happening?</div>
+        <div class="pstat">Women consistently say the same thing helped most &mdash; not a cure, but an explanation. Understanding that a feeling follows a hormone pattern, something that can be seen and tracked, is what turns fear back into control.</div>
+        <div class="pfield"><textarea placeholder="Whatever comes to mind."></textarea></div>
+      </div>
+
+      <div class="letgo-wrap">
+        <div class="letgo-sub">When you are ready, release what you wrote. It disappears &mdash; only you will ever have seen it.</div>
+        <button class="btn btn-primary" id="letgoBtn" onclick="letGo()" style="margin-top:0">Let it go. Start to understand it.</button>
+      </div>
+    </div>
+
+    <!-- FINALE -->
+    <div class="finale" id="finale">
+      <div class="release-note" id="releaseNote">That's gone. Only you know what you wrote.</div>
+      <div class="finale-inner" id="finaleInner">
+        <div class="reframe-card">
+          <div class="rf">What you just wrote may not be your personality changing. For many women, feelings like these are connected to a hormonal shift no one prepared them for &mdash; and you do not have to work that out alone.</div>
+        </div>
+
+        <div class="conv">
+          <p class="open-line" style="margin-bottom:4px"><strong>You are not a different person.</strong> You may be in a different hormonal moment than anyone prepared you for.</p>
+          <div class="tracker-bridge" style="border-bottom:none;padding-bottom:0;margin-bottom:0;margin-top:18px">
+            <h3>Start to see it for yourself</h3>
+            <p>Log your mood alongside your cycle. The free InnerBloom Pattern Tracker often makes the connection clear within a month &mdash; the days it arrives stop feeling random.</p>
+            <a class="btn btn-outline" style="margin-top:16px" href="https://innerbloomkit-source.github.io/innerbloom-resource/pattern-tracker.html">Open the free Pattern Tracker</a>
+          </div>
+        </div>
+
+        <div class="conv" style="margin-top:18px">
+          <div id="capture">
+            <h2 style="font-size:24px">Find out what is actually happening.</h2>
+            <p>Feelings like these can be tied to hormonal shifts &mdash; but you deserve to know for sure, not guess. InnerBloom is building a perimenopause clarity kit that connects your cycle, your symptoms, and your hormone levels &mdash; so you can finally see what is driving this, support your body based on your own pattern, and stop the rage feeling like it is simply you.</p>
+            <div class="field"><input type="email" id="email" placeholder="Your email" autocomplete="email" inputmode="email"></div>
+            <button class="btn btn-primary" id="submitBtn" onclick="capture()" style="margin-top:16px">Tell me when it is ready</button>
+            <div class="micro">No spam. No noise. Just the update when it matters.</div>
+          </div>
+          <div class="ok-cap" id="okcap">
+            <div class="insta">@innerbloom_kit</div>
+            <h2 style="font-size:23px">You are on the list.</h2>
+            <p style="font-size:15px;margin-top:10px">The next time it arrives, you will have somewhere to put it &mdash; and an explanation on the way. We will be in touch when there is more.</p>
+          </div>
+        </div>
+
+        <div class="closing">
+          <div class="line">When you are ready to understand what your body is doing &mdash; InnerBloom will be ready too.</div>
+        </div>
+        <div class="foot">
+          <a href="https://innerbloomkit.com" target="_blank" rel="noopener">innerbloomkit.com</a>
+          <div class="disclaimer">This is a personal reflection tool, not medical advice. It is intended to support understanding, not to diagnose or treat any condition. If your mood is significantly affecting your life or relationships, please speak with a qualified medical professional.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const KLAVIYO_COMPANY_ID="XmzfxG";
+const KLAVIYO_LIST_ID="Wy6Edm"; // Rage Reflection Card (READY)
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'instant'});}
+function begin(){show('s-reflect');}
+
+/* lock user scrolling but still allow programmatic scroll */
+function pd(e){e.preventDefault();}
+function pdKeys(e){if([32,33,34,35,36,38,40].indexOf(e.keyCode)>-1)e.preventDefault();}
+function lockScroll(){window.addEventListener('wheel',pd,{passive:false});window.addEventListener('touchmove',pd,{passive:false});window.addEventListener('keydown',pdKeys,{passive:false});}
+function unlockScroll(){window.removeEventListener('wheel',pd,{passive:false});window.removeEventListener('touchmove',pd,{passive:false});window.removeEventListener('keydown',pdKeys,{passive:false});}
+
+/* custom eased auto-scroll (so it keeps working while user scroll is locked) */
+function autoScroll(from,to,dur){
+  const start=performance.now();
+  function step(now){
+    const t=Math.min((now-start)/dur,1);
+    const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2; // easeInOutQuad
+    window.scrollTo(0,from+(to-from)*e);
+    if(t<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+let released=false;
+function letGo(){
+  if(released)return;released=true;
+  const btn=document.getElementById('letgoBtn');
+  btn.disabled=true;btn.style.opacity='.4';btn.textContent='Letting go\u2026';
+  lockScroll();
+  // reveal finale to reserve its layout height (inner still invisible)
+  const fin=document.getElementById('finale');
+  fin.style.display='block';void fin.offsetHeight;
+  // jump to the first prompt instantly
+  const p1=document.getElementById('p1');
+  const topY=Math.max(p1.getBoundingClientRect().top+window.scrollY-16,0);
+  window.scrollTo(0,topY);
+  // measure where the finale sits
+  const endY=Math.max(fin.getBoundingClientRect().top+window.scrollY-window.innerHeight*0.14,0);
+
+  setTimeout(()=>{
+    const blocks=[].slice.call(document.querySelectorAll('.promptblock'));
+    const STAGGER=720;
+    // dissolve wave, top to bottom
+    blocks.forEach((b,i)=>setTimeout(()=>b.classList.add('dissolve'),i*STAGGER));
+    const waveEnd=blocks.length*STAGGER; // ~3600
+    // continuous downward auto-scroll that follows the wave to the CTA
+    autoScroll(window.scrollY,endY,waveEnd+1100);
+    // fade the header and button out as part of the release
+    setTimeout(()=>{document.querySelector('.reflect-head').style.opacity='0';},700);
+    setTimeout(()=>{document.querySelector('.letgo-wrap').style.opacity='0';},waveEnd*0.35);
+    // finale arrives: note + overshoot land, then hand scrolling back
+    setTimeout(()=>{
+      document.getElementById('releaseNote').classList.add('show');
+      document.getElementById('finaleInner').classList.add('land');
+      unlockScroll();
+    },waveEnd+1300);
+  },680);
+}
+
+async function capture(){
+  const email=document.getElementById('email').value.trim();
+  const btn=document.getElementById('submitBtn');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){document.getElementById('email').style.borderColor='#A9404A';document.getElementById('email').focus();return;}
+  btn.textContent='One moment\u2026';btn.style.opacity='.7';
+  try{
+    await fetch('https://a.klaviyo.com/client/subscriptions/?company_id='+KLAVIYO_COMPANY_ID,{
+      method:'POST',headers:{'Content-Type':'application/json','revision':'2024-10-15'},
+      body:JSON.stringify({data:{type:'subscription',attributes:{profile:{data:{type:'profile',attributes:{email:email}}}},relationships:{list:{data:{type:'list',id:KLAVIYO_LIST_ID}}}}})
+    });
+  }catch(e){}
+  document.getElementById('capture').style.display='none';
+  document.getElementById('okcap').style.display='block';
+}
+</script>
+</body>
+</html>
